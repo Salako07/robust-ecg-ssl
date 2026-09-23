@@ -1,0 +1,59 @@
+PTB-XL likelihood values on shared statements:
+ 0.0       4843
+10.0         1
+14.0         1
+15.0      1722
+30.0         1
+34.0         1
+35.0       383
+50.0      2397
+80.0      2136
+100.0    17185
+
+validated_by_human share: 0.737
+by strat_fold: {1: 0.673, 2: 0.663, 3: 0.67, 4: 0.681, 5: 0.677, 6: 0.642, 7: 0.679, 8: 0.678, 9: 1.0, 10: 1.0}
+
+PTB-XL train positives (min/max across seeds) by budget:
+                             min                              max                            
+budget                     0.01 0.05 0.10  0.25  0.50  1.00 0.01 0.05 0.10  0.25  0.50  1.00
+role             label                                                                      
+exploratory      MI_ANY      43  203  387  1023  2124  4235   45  210  417  1098  2171  4235
+                 NORM        70  368  753  1863  3782  7596   81  403  810  1915  3803  7596
+                 TWAVE_ABN    2   11   20    64   126   263    3   12   26    68   132   263
+primary          AF           6   45  113   302   587  1211   10   69  134   305   634  1211
+                 ASMI        12   87  172   456   933  1887   25   99  192   509   992  1887
+                 CLBBB        1   19   36   104   212   428    4   22   48   119   227   428
+                 CRBBB        2   22   41   109   220   432    8   26   50   119   241   432
+                 IMI         18  100  188   486  1053  2143   28  104  199   540  1082  2143
+                 IRBBB        9   30   77   213   439   894   11   40   84   246   488   894
+                 LAFB        13   58  118   295   607  1298   13   65  132   330   648  1298
+                 LVH         16   74  145   405   844  1708   19   85  166   442   871  1708
+                 PR_PROL      7   41   73   182   398   808    7   48   89   232   428   808
+secondary        SARRH        6   21   51   141   290   618    7   44   74   173   314   618
+                 SBRAD        1   24   48   122   248   509    6   35   63   148   267   509
+                 STACH        3   30   59   154   308   661    7   34   75   178   356   661
+window_dependent PAC          2   10   27    71   151   318    4   17   34    86   164   318
+                 PVC          5   33   78   214   432   915    9   45  102   253   510   915
+
+SPH positives:
+                        role  pos_records  pos_patients
+label                                                 
+AF                  primary          675           634
+PR_PROL             primary          238           233
+CRBBB               primary          710           658
+IRBBB               primary         1259          1238
+CLBBB               primary           84            79
+LAFB                primary          154           149
+LVH                 primary          209           201
+IMI                 primary          120           117
+ASMI                primary           91            82
+MI_ANY          exploratory          260           242
+TWAVE_ABN       exploratory         2218          2155
+NORM            exploratory        13905         13498
+SBRAD             secondary         2711          2640
+STACH             secondary          725           705
+SARRH             secondary         1553          1527
+PVC        window_dependent         1067          1032
+PAC        window_dependent          539           525
+
+Cells below 10 positives are flagged, not dropped. Written: results/e3_label_support_lik0.csv
