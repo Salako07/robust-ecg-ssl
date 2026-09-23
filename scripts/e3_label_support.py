@@ -3,8 +3,9 @@ E3 feasibility, Gates 1-2: shared-label support in PTB-XL (train folds, patient-
 nested label budgets) and SPH (whole dataset = zero-adaptation test set).
 
 Usage:
-  python e3_label_support.py --ptbxl /path/to/ptbxl_database.csv \
-                             --sph /path/to/SPH/metadata.csv \
+  python scripts/e3_label_support.py --ptbxl data/ptbxl/ptbxl_database.csv \
+                             --scp-statements data/ptbxl/scp_statements.csv \
+                             --sph data/sph/metadata.csv \
                              --seeds 0 1 2 --min-pos 10 --out e3_label_support.csv
 
 Mapping source: PTB-XL scp_statements.csv "AHA code" column (dataset authors' own

@@ -1,0 +1,5 @@
+# Pin exact versions from your working environment before the first experiment:
+#   pip freeze > requirements.lock.txt
+numpy
+pandas
+h5py
