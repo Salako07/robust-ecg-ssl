@@ -6,13 +6,13 @@ distribution shift, **once supervised baselines receive the same augmentations**
 This is a master's research portfolio project: a working paper plus a reproducible codebase.
 It does not aim to set state-of-the-art results.
 
-## Research question (v2, provisional)
+## Research question (v2)
 
-When supervised and contrastive self-supervised models receive identical augmentation exposure,
-does contrastive pretraining still improve (a) label efficiency and (b) robustness on PTB-XL,
-and does any robustness advantage depend on whether the test-time shift was represented in the
-augmentation policy? The gap statement is not frozen until the remaining literature checks are
-done.
+When supervised and contrastively pretrained ECG models receive the same augmentation policy, does
+self-supervised pretraining still improve (a) performance under limited labels, (b) robustness to
+signal corruptions no model saw during training, and (c) performance on an external hospital dataset
+without adaptation? Hypotheses, the 2 × 2 design and primary contrasts:
+[`docs/research_question_v2.md`](docs/research_question_v2.md).
 
 ## What is decided
 
@@ -54,7 +54,7 @@ See [`results/README.md`](results/README.md) for what each output file contains.
 
 | Stage | State |
 |---|---|
-| Literature review and gap | in progress (3 checks outstanding) |
+| Literature review and gap | done; RQ v2 drafted, frozen once compute is confirmed |
 | E3 label harmonisation and support | done |
 | SPH deduplication | script ready, not yet run |
 | Signal preprocessing pipeline | not started |

@@ -95,3 +95,28 @@ supersede them with a new one.
   group if members differ in AHA *primary* statements (modifier-only differences are not conflicts).
 - **Reason:** Leinonen et al. report 132 ECGs with identical recording data in SPH.
 - **Impact:** pending run; record counts here when done.
+
+### D15 — 2026-09-26 · Core design is a 2 × 2 factorial (initialisation × fine-tuning augmentation)
+- **Reason:** prior ECG SSL studies compare SSL against supervised baselines trained without the SSL
+  augmentations (A1, A3, A7), so the SSL effect is confounded with augmentation. Crossing
+  initialisation (random / SSL) with augmentation (none / P) separates the two and gives their interaction.
+- **Evidence:** literature matrix A1, A3, A5, A7, A8, B2.
+- **Impact:** primary contrast is C1 − S1 (both with P). Arms S0 and C0 reproduce prior comparisons.
+
+### D16 — 2026-09-26 · Corruption suite split into seen and held-out
+- **Reason:** in A1 the robustness test uses the same noise family as the pretraining augmentations,
+  so part of the robustness gain is guaranteed by construction.
+- **Impact:** H2a is tested only on lead dropout, LA↔RA limb-lead reversal and baseline step shift,
+  none of which appears in either augmentation policy.
+
+### D17 — 2026-09-26 · H3 compares strength-matched policies over a shared grid
+- **Reason:** A2 shows contrastive ECG performance depends on augmentation strength, so an
+  ECG-specific vs generic comparison at arbitrary strengths could be explained by strength alone.
+- **Impact:** 3 strength levels per policy, matched on SNR (or fraction altered), selected on fold 9,
+  full grid reported.
+
+### D18 — 2026-09-26 · Four Holm-corrected primary contrasts; ≥ 5 seeds target
+- **Reason:** many arms × budgets × shifts invite multiple-comparison problems; A8/A9 show that
+  three seeds cannot support claims about rates or stability.
+- **Impact:** secondary results reported without significance claims. If compute is short, drop the
+  10% and 50% budgets before going below 5 seeds.
