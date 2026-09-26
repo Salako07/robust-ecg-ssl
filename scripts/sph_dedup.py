@@ -14,11 +14,13 @@ Usage:
                               --out-dir results
 Writes results/sph_duplicate_groups.csv and results/sph_exclude.txt (one ECG_ID per line).
 """
-import argparse, hashlib, os
+import argparse, hashlib, os, sys
 import h5py
 import numpy as np
 import pandas as pd
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+from robust_ecg.sph import resolve_all  # noqa: E402
 
 MODIFIER_MIN = 300  # AHA modifiers are 3xx; primary statements are < 300
 
@@ -48,15 +50,13 @@ def main():
     a = ap.parse_args()
 
     meta = pd.read_csv(a.meta)
-    rows, missing = [], []
-    for ecg_id in meta["ECG_ID"]:
-        p = os.path.join(a.sph_dir, ecg_id)
-        if not os.path.exists(p):
-            missing.append(ecg_id); continue
+    paths = resolve_all(a.sph_dir, list(meta["ECG_ID"]))   # fails loudly if any file is missing
+    rows = []
+    for i, (ecg_id, p) in enumerate(paths.items()):
         h, shape = signal_hash(p)
         rows.append((ecg_id, h, shape[0], shape[1]))
-    if missing:
-        print(f"WARNING: {len(missing)} files listed in metadata not found, e.g. {missing[:3]}")
+        if (i + 1) % 5000 == 0:
+            print(f"hashed {i + 1}/{len(paths)}", flush=True)
 
     df = pd.DataFrame(rows, columns=["ECG_ID", "sha256", "n_leads", "n_samples"]).merge(meta, on="ECG_ID")
     bad_leads = (df["n_leads"] != 12).sum()
@@ -80,7 +80,7 @@ def main():
     n_groups = dup["sha256"].nunique()
     print(f"records hashed: {len(df)} | duplicate groups: {n_groups} | records in groups: {len(dup)}")
     print(f"groups spanning >1 patient: {(dup.groupby('sha256')['Patient_ID'].nunique() > 1).sum()}")
-    print(f"groups with label conflict: {dup.groupby('sha256')['label_conflict'].first().sum()}")
+    print(f"groups with label conflict: {int(dup.groupby('sha256')['label_conflict'].first().sum())}")
     print(f"excluded: {len(exclude)} -> {len(df) - len(exclude)} SPH records remain")
 
 

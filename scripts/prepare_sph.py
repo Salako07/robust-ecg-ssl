@@ -12,6 +12,7 @@ import pandas as pd
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from robust_ecg.preprocess import amplitude_report, preprocess  # noqa: E402
+from robust_ecg.sph import resolve_all  # noqa: E402
 
 
 def read_h5(path):
@@ -33,16 +34,19 @@ def main():
     a = ap.parse_args()
 
     meta = pd.read_csv(os.path.join(a.sph_dir, "metadata.csv"))
+    if not os.path.isfile(a.exclude):
+        raise FileNotFoundError(f"{a.exclude} missing: run sph_dedup.py first")
     with open(a.exclude) as f:
         excl = {l.strip() for l in f if l.strip()}
     n0 = len(meta)
     meta = meta[~meta["ECG_ID"].isin(excl)].sort_values("ECG_ID").reset_index(drop=True)
     print(f"SPH: {n0} records, {n0 - len(meta)} excluded by dedup, {len(meta)} kept")
 
+    paths = resolve_all(os.path.join(a.sph_dir, "records"), list(meta["ECG_ID"]))
     X = np.empty((len(meta), 12, 1000), np.float32)
     t0 = time.time()
     for i, e in enumerate(meta["ECG_ID"]):
-        X[i] = preprocess(read_h5(os.path.join(a.sph_dir, "records", e)))
+        X[i] = preprocess(read_h5(paths[e]))
         if (i + 1) % 2000 == 0:
             print(f"{i + 1}/{len(meta)} ({time.time() - t0:.0f}s)", flush=True)
     amplitude_report(X, "SPH")

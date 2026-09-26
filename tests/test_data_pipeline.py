@@ -128,3 +128,48 @@ def test_prepare_ptbxl_end_to_end(tmp_path):
     mean, std = data.load_norm(str(out))
     assert mean.shape == (12, 1) and np.all(std > 0)
     assert json.load(open(out / "ptbxl_statements.json")) == list(SCP.index)
+
+
+# --- SPH scripts with the real naming: metadata IDs without '.h5' ---------------------------
+def _write_sph(root, ids, lengths):
+    import h5py
+    rec = root / "records"; rec.mkdir(parents=True)
+    rng = np.random.default_rng(0)
+    for e, L in zip(ids, lengths):
+        with h5py.File(rec / f"{e}.h5", "w") as f:
+            f.create_dataset("ecg", data=(rng.standard_normal((12, L)) * 0.2).astype(np.float16))
+    return rec
+
+
+def test_sph_scripts_accept_ids_without_extension(tmp_path):
+    ids = ["A00001", "A00002", "A00003"]
+    rec = _write_sph(tmp_path / "sph", ids, [5000, 6000, 30000])
+    import h5py, shutil
+    shutil.copy(rec / "A00001.h5", rec / "A00004.h5")          # exact duplicate of A00001
+    ids.append("A00004")
+    pd.DataFrame(dict(ECG_ID=ids, AHA_Code=["1", "50+346", "22", "1"],
+                      Patient_ID=["S1", "S2", "S3", "S1"])).to_csv(tmp_path / "sph" / "metadata.csv", index=False)
+    res = tmp_path / "results"
+    r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "sph_dedup.py"), "--sph-dir", str(rec),
+                        "--meta", str(tmp_path / "sph" / "metadata.csv"), "--out-dir", str(res)],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    assert (res / "sph_exclude.txt").read_text().split() == ["A00004"]
+    out = tmp_path / "cache"; out.mkdir()
+    r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "prepare_sph.py"), "--sph-dir",
+                        str(tmp_path / "sph"), "--exclude", str(res / "sph_exclude.txt"), "--out", str(out)],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    X, meta = data.load_cache(str(out), "sph")
+    assert X.shape == (3, 12, 1000) and list(meta["ECG_ID"]) == ["A00001", "A00002", "A00003"]
+
+
+def test_sph_dedup_fails_when_files_missing(tmp_path):
+    rec = _write_sph(tmp_path / "sph", ["A00001"], [5000])
+    pd.DataFrame(dict(ECG_ID=["A00001", "A09999"], AHA_Code=["1", "1"], Patient_ID=["S1", "S2"])
+                 ).to_csv(tmp_path / "meta.csv", index=False)
+    r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "sph_dedup.py"), "--sph-dir", str(rec),
+                        "--meta", str(tmp_path / "meta.csv"), "--out-dir", str(tmp_path / "res")],
+                       capture_output=True, text=True)
+    assert r.returncode != 0 and "A09999" in r.stderr
+    assert not (tmp_path / "res" / "sph_exclude.txt").exists()
