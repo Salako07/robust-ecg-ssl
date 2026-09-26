@@ -120,3 +120,7 @@ supersede them with a new one.
   three seeds cannot support claims about rates or stability.
 - **Impact:** secondary results reported without significance claims. If compute is short, drop the
   10% and 50% budgets before going below 5 seeds.
+
+### D19 — 2026-09-26 · Compute: single T4; RQ v2 frozen
+- **Evidence:** user's hardware; planning estimate ≈ 50–60 GPU-hours from A1's reported V100 fine-tuning time, assumed 2–3× slower on T4.
+- **Impact:** FP16 and checkpoint/resume are mandatory; SimCLR batch ≈ 512; run order puts the primary contrasts (S1, C1) first and H3 last. Estimates are replaced by measured times after the first baseline runs.

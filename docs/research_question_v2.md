@@ -1,6 +1,6 @@
 # Research question v2, hypotheses and design
 
-**Status:** v2, drafted 2026-09-26. Frozen once the compute budget (§7) is confirmed.
+**Status:** v2, **frozen 2026-09-26**. Changes require v3 and a decision-log entry.
 Supersedes the research question and hypotheses in [`plan_v0.md`](plan_v0.md) §2–3.
 Evidence for each claim below is in [`literature_matrix.md`](literature_matrix.md) (IDs A1–B3).
 
@@ -117,18 +117,31 @@ attributable to augmentation, which is itself a publishable finding.
 - **Training diagnostics:** per-seed results at every budget; runs whose best validation epoch is
   ≤ 1 are flagged (descriptive only, following the concern raised in A8/A9).
 
-## 7. Compute budget (to confirm)
+## 7. Compute budget
 
-Fine-tuning runs for the core design = 4 arms × 5 budgets × *S* seeds; H3 adds pretraining runs for
-two policies × 3 strengths and fine-tuning at 100% only.
+**Hardware:** one NVIDIA T4 (16 GB). All runs use mixed precision (FP16) and must checkpoint and
+resume, since hosted T4 sessions are time-limited.
 
-| Seeds *S* | Core fine-tuning runs | Minimum SSL pretraining runs |
-|---:|---:|---:|
-| 3 | 60 | 1 per policy-strength (6) + 1 core |
-| **5 (target)** | **100** | as above |
+Fine-tuning runs for the core design = 4 arms × 5 budgets × 5 seeds = **100 runs**.
 
-Rule if compute is short: drop the 10% and 50% budgets before reducing seeds below 5.
-Run-time estimates will be measured from the first baseline runs, not assumed.
+**Planning estimate (to be replaced by measured times after the first baseline runs).** Mehari &
+Strodthoff (A1) report ~10 min to fine-tune xresnet1d50 on PTB-XL at 100 Hz on a V100. Assuming a T4
+is 2–3× slower:
+
+| Component | Runs | Est. T4 time each | Est. total |
+|---|---:|---:|---:|
+| Fine-tuning, core (time scales with budget: 5+10+25+50+100 = 1.9× a full run per arm-seed) | 20 arm-seeds | ≈ 1 h | ≈ 20 h |
+| SSL pretraining, core (one per seed, PTB-XL folds 1–8, ≈ 300 epochs) | 5 | 2–3 h | 10–15 h |
+| SSL pretraining, H3 grid (2 policies × 3 strengths) | 6 | 2–3 h | 12–18 h |
+| H3 fine-tuning at 100% + all evaluation (corruptions, SPH) | — | — | ≈ 5 h |
+| **Total** | | | **≈ 50–60 GPU-hours** |
+
+- SimCLR batch size is limited by T4 memory; start at 512 and report the value used. Smaller batches
+  than A1 (8192) mean fewer negatives, which is stated as a limitation, not tuned away.
+- **Order of runs protects the primary contrasts:** S0 sanity check → S1 and C1 (all budgets, 5 seeds)
+  → S0 and C0 → corruption and SPH evaluation → H3 grid last.
+- Rule if compute is short: drop the 10% and 50% budgets before going below 5 seeds; H3 can be
+  reduced to one strength level per policy, reported as a limitation.
 
 ## 8. What would change this design
 

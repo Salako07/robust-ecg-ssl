@@ -54,7 +54,7 @@ See [`results/README.md`](results/README.md) for what each output file contains.
 
 | Stage | State |
 |---|---|
-| Literature review and gap | done; RQ v2 drafted, frozen once compute is confirmed |
+| Literature review and gap | done; RQ v2 frozen |
 | E3 label harmonisation and support | done |
 | SPH deduplication | script ready, not yet run |
 | Signal preprocessing pipeline | not started |
