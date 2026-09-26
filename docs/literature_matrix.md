@@ -4,7 +4,7 @@ Source of truth for the literature review. **Verification** says what was actual
 *full text*, *abstract*, or *search excerpt only* (treat the last as unverified).
 Columns H1/H2/H3 and "Aug-matched control" are our reading, not the authors' framing.
 
-Last updated: 2026-09-26.
+Last updated: 2026-09-26 (A8, A9 read in full).
 
 ## A. ECG self-supervised learning
 
@@ -17,8 +17,8 @@ Last updated: 2026-09-26.
 | A5 | Lai et al., *Practical intelligent diagnostic algorithm for wearable 12-lead ECG via self-supervised learning on large-scale dataset* | Nat. Commun. 14:3741 (2023) | Private wearable, 658k ECGs | 10–100% | Quality-stratified test; CPSC2018 with retraining | No | **Yes, full labels only**: AUPRC 0.582 / 0.593 (+PW) / 0.637 (+Aug) / 0.646 (+Aug+PW); Aug+PW not significantly better than Aug | full text |
 | A6 | Dade et al., *Self-supervised contrastive learning enables robust electrocardiogram-based cardiac classification* | Heart Rhythm O2 7(4):757–770 (2026) | Private, ~1M ECGs; binary LVEF, KCl | 1–100%, 5 seeds | No | No | No | full text |
 | A7 | Weimann & Conrad, *Self-supervised pre-training with joint-embedding predictive architecture boosts ECG classification performance* | Comput. Biol. Med. (2025); arXiv 2410.13867 | 10 public DBs, >1M records; PTB-XL eval | **No** | **No** external evaluation | N/A (JEPA avoids hand-crafted augs) | **No** — baselines are random init or other SSL | full text (v1) |
-| A8 | Zeng et al., *Stabilizing extreme few-shot ECG classification via self-supervised contrastive pretraining* | Ann. Noninvasive Electrocardiol. (2026), doi 10.1111/anec.70188 | Unverified | N = 70 (extreme few-shot) | Unverified | No | **Partial**: "Aug Only" group vs "SSL, NoAug"; primary outcome is training collapse, not accuracy | **search excerpt only** |
-| A9 | Ahmed et al., *Critical appraisal of self-supervised contrastive pretraining for extreme few-shot ECG classification* | Ann. Noninvasive Electrocardiol. (2026), doi 10.1111/anec.70216 | Commentary on A8 | — | — | — | — | **title only; not read** |
+| A8 | Zeng, Pan, Lu & Pan, *Stabilizing extreme few-shot ECG classification via self-supervised contrastive pretraining* | Ann. Noninvasive Electrocardiol. 31(3):e70188 (2026) | PTB-XL, single-label 5 rhythm classes (SR, AFIB, STACH, SARRH, SBRAD); SimCLR on 16,304 unlabeled records; test 2,035 records, long-tailed | N = 70 (14/class) vs N = 300 references only | No (authors: no external validation, no patient-wise split) | No | **Not matched in our sense.** 'Aug Only' (E) = strong augmentation on the 70 labelled records; the SSL arm additionally sees 16,304 unlabelled records. Result: Macro-F1 C scratch 0.115±0.072, E aug-only 0.108±0.042, D SSL+NoAug 0.192±0.003 (3 seeds) | full text |
+| A9 | Ahmed, Raza, Aman & Tahir, *Critical appraisal of self-supervised contrastive pretraining for extreme few-shot ECG classification* | Letter to the editor, Ann. Noninvasive Electrocardiol. 31:e70216 (2026) | Critique of A8 | — | — | — | Raises: 3 seeds (66.7% collapse = 2 failed runs); no CIs, bootstrap or hypothesis tests; collapse definition (best epoch ≤ 1) not validated against entropy, calibration or class-distribution collapse; no comparison with other few-shot or transfer-learning methods | full text |
 
 ## B. Outside ECG: does SSL help once augmentation is controlled?
 
@@ -32,5 +32,14 @@ Last updated: 2026-09-26.
 
 1. **The core control is not new in general ML.** B2 already compares contrastive and supervised learning under identical augmentation and finds a downstream-robustness advantage for contrastive learning. Our contribution cannot be "first augmentation-matched comparison"; it has to be the **ECG-specific combination**: augmentation-matched supervision × label budgets × held-out ECG corruptions × zero-adaptation transfer to an external hospital.
 2. **B2 gives us a testable, pre-registrable prediction:** if B2 transfers to ECG, SSL should keep an advantage on held-out test-time corruptions even against augmentation-matched supervision. A5 (full labels, private data) points the other way for clean performance. The disagreement is itself a reason to run the experiment.
-3. **Within ECG, no reviewed study combines the augmentation-matched control with label budgets or external-dataset evaluation.** A5 has the control at full labels only; A8 appears to have a related control only at N = 70 with a stability outcome (unverified); A7 has neither control nor external evaluation.
-4. **Still to check before freezing the gap:** read A8 and A9 in full (blocked from our environment; download manually); search time-series SSL benchmarks for augmentation-matched baselines (first search found nothing directly on point).
+3. **Within ECG, no reviewed study combines an augmentation-matched supervised control with label budgets or external-dataset evaluation.** A5 has the control at full labels only (private data). A8's "Aug Only" arm is not the control we need: it augments 70 labelled records while the SSL arm also sees 16,304 unlabelled ones, so it confounds augmentation with unlabelled-data exposure.
+4. **Additional problems in A8 we found (not raised in A9):**
+   - A majority-class predictor on their test set scores Macro-F1 ≈ 0.18 (their own dashed line). The headline SSL result, 0.192 ± 0.003, is barely above it. From their confusion matrix, SR is 1,666 of 2,035 test records (≈ 82%), so a constant SR predictor would reach ≈ 0.82 accuracy; the SSL arm reports 0.331. "Stable" here means stably near-degenerate.
+   - It is not stated whether the 16,304 unlabelled pretraining records exclude the 2,035 test records (21,837 − 16,304 = 5,533 records unaccounted for). If they overlap, pretraining was transductive.
+   - The single-label 5-class task is carved out of a multi-label dataset; how co-occurring rhythm statements were handled is not described.
+5. **Design lessons we adopt from A8/A9:**
+   - Report a constant-predictor reference for every threshold-dependent metric. AUROC (our headline) is 0.5 for any constant predictor, which guards against the degenerate-solution problem.
+   - At the exploratory 1% budget, report per-seed results and flag runs whose best validation epoch is ≤ 1, as a descriptive check, not a primary outcome.
+   - Pre-register whether fine-tuning uses augmentation; A8 finds downstream augmentation at N = 70 increases instability (33.3% collapse vs 0%), so it is a real confound for every arm.
+   - Use enough seeds to support the claims made; three seeds cannot estimate a rate.
+6. **Gap status:** A7, A8 and A9 do not close the gap. The remaining search (time-series SSL benchmarks with augmentation-matched baselines) found nothing directly on point. The gap statement can now be frozen as v2.
