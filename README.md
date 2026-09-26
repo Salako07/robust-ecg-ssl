@@ -31,6 +31,16 @@ without adaptation? Hypotheses, the 2 × 2 design and primary contrasts:
 
 Both are CC BY 4.0. Cite the original papers when using them.
 
+## Running on Google Colab
+
+Experiments run on a single T4 in Colab. Caches, checkpoints and results live on Google Drive
+(`MyDrive/robust-ecg-ssl/`), so an interrupted session can resume.
+
+1. Open `notebooks/00_colab_setup.ipynb` in Colab and run all cells once. It downloads PTB-XL and SPH,
+   deduplicates SPH and builds the preprocessed caches ([`docs/preprocessing_v1.md`](docs/preprocessing_v1.md)).
+
+Tests (CPU, synthetic data): `python -m pytest -q tests`.
+
 ## Reproduce the current results
 
 ```bash
@@ -57,7 +67,7 @@ See [`results/README.md`](results/README.md) for what each output file contains.
 | Literature review and gap | done; RQ v2 frozen |
 | E3 label harmonisation and support | done |
 | SPH deduplication | script ready, not yet run |
-| Signal preprocessing pipeline | not started |
+| Signal preprocessing pipeline | specified and tested; caches built on Colab (notebook 00) |
 | Baselines, SSL, experiments | not started |
 
 ## License

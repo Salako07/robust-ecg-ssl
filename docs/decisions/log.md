@@ -124,3 +124,20 @@ supersede them with a new one.
 ### D19 — 2026-09-26 · Compute: single T4; RQ v2 frozen
 - **Evidence:** user's hardware; planning estimate ≈ 50–60 GPU-hours from A1's reported V100 fine-tuning time, assumed 2–3× slower on T4.
 - **Impact:** FP16 and checkpoint/resume are mandatory; SimCLR batch ≈ 512; run order puts the primary contrasts (S1, C1) first and H3 last. Estimates are replaced by measured times after the first baseline runs.
+
+### D20 — 2026-09-26 · Powerline interference removed from P_ecg (RQ v2 → v2.1, before any results)
+- **Reason:** at 100 Hz sampling a 50 Hz component lies exactly at the Nyquist frequency and 60 Hz
+  aliases to 40 Hz; both are also removed by the 0.5–40 Hz band-pass and by SPH's device filter.
+  An augmentation that the pipeline removes, or that appears at a false frequency, cannot be
+  interpreted as "physiologically motivated".
+- **Impact:** P_ecg = baseline wander, EMG-like noise, per-lead amplitude scaling, random resized crop.
+
+### D21 — 2026-09-26 · Preprocessing v1 shared by PTB-XL and SPH
+- **Decision:** start both datasets from 500 Hz; first 10 s; 0.5–40 Hz zero-phase Butterworth
+  (order 3); anti-aliased resampling to 100 Hz; per-lead normalisation with statistics from PTB-XL
+  folds 1–8 only; 2.5 s training crops; 7 sliding windows (1.25 s stride) averaged at evaluation.
+- **Reason:** identical processing is required for E3 (SPH is device-filtered, PTB-XL is not);
+  per-record z-scoring would erase absolute amplitude, which LVH voltage criteria depend on;
+  the authors' 100 Hz PTB-XL files cannot be reproduced on SPH.
+- **Impact:** full-length SPH evaluation becomes a secondary sensitivity analysis.
+- **Evidence:** `docs/preprocessing_v1.md`; filter behaviour tested in `tests/test_data_pipeline.py`.

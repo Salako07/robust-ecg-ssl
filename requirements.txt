@@ -1,5 +1,9 @@
-# Pin exact versions from your working environment before the first experiment:
+# Pin exact versions from the environment that produced results:
 #   pip freeze > requirements.lock.txt
 numpy
 pandas
+scipy
 h5py
+wfdb
+torch
+pytest

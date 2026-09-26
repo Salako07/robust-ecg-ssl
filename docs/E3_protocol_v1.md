@@ -82,6 +82,6 @@ not records. Seed variation reported separately from bootstrap intervals.
 ## Open items before the first E3 run
 
 1. SPH deduplication run (`scripts/sph_dedup.py`); record counts in the log.
-2. Signal pipeline, applied identically to both datasets: band-pass filter parameters,
-   sampling rate, amplitude units check, 10 s windowing and test-time aggregation rule.
+2. ~~Signal pipeline~~ — specified in [`preprocessing_v1.md`](preprocessing_v1.md) (D21);
+   the amplitude-unit check runs when the caches are built.
 3. Number of bootstrap resamples and seeds per arm (compute-dependent).

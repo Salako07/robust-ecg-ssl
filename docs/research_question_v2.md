@@ -1,6 +1,7 @@
 # Research question v2, hypotheses and design
 
-**Status:** v2, **frozen 2026-09-26**. Changes require v3 and a decision-log entry.
+**Status:** v2.1, **frozen 2026-09-26**. Changes require v3 and a decision-log entry.
+v2.1 (same day, before any results): powerline interference removed from P_ecg (D20).
 Supersedes the research question and hypotheses in [`plan_v0.md`](plan_v0.md) §2–3.
 Evidence for each claim below is in [`literature_matrix.md`](literature_matrix.md) (IDs A1–B3).
 
@@ -79,7 +80,6 @@ attributable to augmentation, which is itself a publishable finding.
 | Transform | P_ecg | P_gen | Seen corruption for | Held-out corruption |
 |---|:-:|:-:|---|:-:|
 | Baseline wander (low-frequency sinusoids) | ✓ | | P_ecg | |
-| Powerline interference (50/60 Hz) | ✓ | | P_ecg | |
 | Muscle (EMG-like) noise | ✓ | | P_ecg | |
 | Per-lead amplitude scaling, physiological range | ✓ | | P_ecg | |
 | Additive Gaussian noise | | ✓ | P_gen | |
@@ -92,6 +92,8 @@ attributable to augmentation, which is itself a publishable finding.
 | **Baseline step shift (electrode motion)** | | | | ✓ |
 
 - **Policy P for the core factorial (H1, H2) is P_ecg.** Decided before any results.
+- Powerline interference is not in P_ecg: at 100 Hz it lies at or aliases below the Nyquist
+  frequency and is removed by the 0.5–40 Hz band-pass (D20, `preprocessing_v1.md`).
 - **Strength matching for H3:** each policy is run at three strength levels chosen so that the mean
   per-lead SNR of augmented views is comparable across policies (masking and warping, which have no
   SNR, are matched on the fraction of samples altered). The level used for each policy is selected on
