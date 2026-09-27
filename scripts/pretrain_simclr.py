@@ -13,7 +13,7 @@ import torch
 from torch.utils.data import DataLoader
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-from robust_ecg import augment, data  # noqa: E402
+from robust_ecg import augment, data, runinfo  # noqa: E402
 from robust_ecg.models import SimCLRNet, count_params, nt_xent  # noqa: E402
 
 
@@ -80,7 +80,7 @@ def main():
     elif not a.max_steps:
         json.dump(dict(vars(a), run_id=run_id, n_records=len(idx), n_params=count_params(net),
                        steps_per_epoch=steps_per_epoch, total_steps=total, augment=aug.name, device=str(dev),
-                       torch=torch.__version__), open(os.path.join(rdir, "config.json"), "w"), indent=1)
+                       **runinfo.info()), open(os.path.join(rdir, "config.json"), "w"), indent=1)
     print(f"{run_id}: {len(idx)} unlabelled records, {steps_per_epoch} steps/epoch, {a.epochs} epochs, device={dev}")
 
     t0, step_count = time.time(), 0

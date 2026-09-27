@@ -13,7 +13,7 @@ import torch
 from torch.utils.data import DataLoader
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-from robust_ecg import augment, data, labels, metrics, splits  # noqa: E402
+from robust_ecg import augment, data, runinfo, labels, metrics, splits  # noqa: E402
 from robust_ecg.models import XResNet1d50, count_params  # noqa: E402
 
 ARMS = {"S0": dict(init="random", aug=None), "S1": dict(init="random", aug="ecg"),
@@ -105,7 +105,7 @@ def main():
         json.dump(dict(vars(a), run_id=run_id, n_train=len(tr_idx), n_params=count_params(model),
                        total_steps=total, eval_every=eval_every, statements=len(stmts),
                        augment=aug.name if aug else None, encoder_sha256=enc_sha, device=str(dev),
-                       torch=torch.__version__), open(os.path.join(rdir, "config.json"), "w"), indent=1)
+                       **runinfo.info()), open(os.path.join(rdir, "config.json"), "w"), indent=1)
     print(f"{run_id}: train={len(tr_idx)} records, {total} steps, eval every {eval_every}, device={dev}")
 
     # ---- train ----

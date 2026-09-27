@@ -104,3 +104,13 @@ H3 defined only loosely.
 - Run files committed: `results/runs/{S1,C1}_b1_s0_lik0`, `results/ssl/SSL_ecg-mid_s0` (encoder kept on Drive, hash recorded).
 - The predictions files hold scores and row indices but not labels, so the bootstrap analysis has to rebuild labels
   from the caches (on Colab or with the metadata). Noted for the analysis script.
+
+## 2026-09-27 — Move to Kaggle
+- The user started notebook 03 on Kaggle, which the Colab-only notebook did not support (no Drive, read-only
+  inputs, outputs kept only per saved version). Rewrote it to detect the platform and wrote `scripts/run_queue.py`.
+  It is a resumable scheduler with one job per GPU and SSL dependencies. It rebuilds the registry and archives the
+  outputs after each job, and stops its child jobs cleanly on interrupt.
+- Tested on synthetic data with two parallel slots, a kill partway through and a restart. The restart skipped
+  finished jobs, resumed the rest and left no orphaned processes; the registry had no duplicates. The first version
+  left orphaned child processes when killed, which is why signal handling was added.
+- Colab runs moved to `results/pilot_colab/` (D32). Seed 0 will be rerun on Kaggle and compared with the pilot.

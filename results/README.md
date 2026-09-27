@@ -12,3 +12,12 @@
 
 Seeds 0, 1, 2. Budgets are nested and patient-level within PTB-XL folds 1–8.
 Logs are the console output of the run that produced the matching CSV.
+
+## Platforms (D32)
+
+- `pilot_colab/`: the first runs, made on Colab (T4) before the grid moved to Kaggle: S0/S1/C1 at 100% seed 0 and
+  `SSL_ecg-mid_s0`. They are a **pilot**, not part of the analysed grid. The Kaggle grid reruns the same
+  configurations, and the two copies are compared as a cross-platform reproducibility check.
+- `runs/`, `ssl/`: the analysed grid, all from one platform (Kaggle, 2 × T4). Each `config.json` records `platform`,
+  `gpu`, `torch` and `cudnn`. `cache_manifest.json` gives the SHA-256 of every cache file the grid read.
+- `logs/`: console output of every grid run.

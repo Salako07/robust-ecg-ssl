@@ -286,3 +286,23 @@ supersede them with a new one.
   reported whatever its outcome.
 - **Compute:** SSL 24 min per run and fine-tuning ~6 min at 100% (~2 min below) put the full core grid plus H3 at
   roughly 12 GPU-hours.
+
+### D32 — 2026-09-27 · Core grid moves to Kaggle (2 × T4); Colab runs become a pilot
+- **Decision:** the core grid runs on Kaggle with two T4 GPUs and one job per GPU (`scripts/run_queue.py`,
+  notebook 03). All grid runs, including seed 0, are made there. The five runs already made on Colab
+  (S0/S1/C1 at 100% seed 0 and `SSL_ecg-mid_s0`) move to `results/pilot_colab/`. They are reported as a pilot and
+  are not pooled with the grid.
+- **Reason:** the user moved to Kaggle. Pooling seed-0 runs from Colab with seeds 1–4 from Kaggle would mix software
+  stacks within one arm. Rerunning seed 0 costs about 35 GPU-minutes and gives a free cross-platform check: the
+  same configuration on the same GPU type under a different environment.
+- **Safeguards:**
+  1. Every `config.json` now records `platform`, `gpu`, `torch` and `cudnn` (`robust_ecg.runinfo`).
+  2. The grid writes `cache_manifest.json` with the SHA-256 of each cache file. The Kaggle cache is a copy of the
+     Drive cache, so the hashes should match the Drive files.
+  3. Concurrent jobs would race when appending to `registry.csv`, so the queue rebuilds the registry from `done.json`
+     files after every job.
+  4. Kaggle outputs survive only as a version's output, so the queue re-archives the whole work folder to
+     `/kaggle/working/work.tar` after every finished job. A later version restores it and skips finished runs.
+- **Note on earlier entries:** D28 and D31 cite `results/runs/…` and `results/ssl/…`. Those files now live under
+  `results/pilot_colab/` with unchanged contents.
+- **Timing (estimate):** ≈ 7.5 GPU-hours for 125 jobs, so ≈ 4 h wall time on two GPUs.
