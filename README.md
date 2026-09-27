@@ -72,7 +72,7 @@ See [`results/README.md`](results/README.md) for what each output file contains.
 | E3 label harmonisation and support | done |
 | SPH deduplication | done: 193 excluded, 25,577 records |
 | Signal preprocessing pipeline | specified and tested; caches built on Colab (notebook 00) |
-| Supervised baseline | code done and tested on synthetic data; sanity-check run pending |
+| Supervised baseline | sanity check passed: fold-10 macro-AUROC 0.9228 (published 0.9242) |
 | SSL, experiments | not started |
 
 ## License

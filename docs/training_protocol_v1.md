@@ -54,3 +54,5 @@ S0 at 100% labels, seed 0. Target: fold-10 macro-AUROC over all statements near 
 xresnet1d50/xresnet1d101 values (≈ 0.92–0.93). Exact agreement is not expected (PTB-XL v1.0.3 vs earlier
 release, D22; fixed LR; mean vs max aggregation). A result below ~0.90 means the pipeline must be debugged
 before continuing.
+
+**Result (2026-09-27, D27):** fold-10 macro-AUROC 0.9228 (published xresnet1d50: 0.9242). Passed.

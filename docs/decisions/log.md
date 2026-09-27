@@ -186,3 +186,29 @@ supersede them with a new one.
 - **Decision:** all prediction (validation, test, SPH, corruptions) runs in float32; training stays in FP16.
   Any remaining non-finite output raises an error naming the records instead of producing a metric.
 - **Impact:** negligible cost; removes a precision difference between datasets from the comparison.
+
+### D25 result — 2026-09-27 · FP16-overflow explanation confirmed
+- **Evidence:** max |x| per record after preprocessing: PTB-XL median 1.76, p99.9 11.1, max 44.2 mV (7 records > 20 mV);
+  **SPH median 1.71, p99.9 43.0, max 1,084.6 mV (39 records > 20 mV, 25 > 100 mV).** Values above ~10 mV are not
+  physiological; these are corrupted recordings (probable scaling or saturation errors) and explain the FP16 overflow.
+
+### D26 — 2026-09-27 · Amplitude outliers kept in the primary analysis; excluded in a sensitivity analysis
+- **Decision:** primary analysis keeps every record (no exclusion rule was pre-specified, and the S0 result with
+  these records included has already been seen, so excluding them now would be a post-hoc choice).
+  Pre-registered sensitivity analysis: exclude records whose max |x| after preprocessing exceeds **20 mV**, applied
+  identically to PTB-XL test, fold 9 and SPH (PTB-XL: 7 records in total; SPH: 39).
+- **Reason:** 20 mV is roughly double the p99.9 of PTB-XL and well above any physiological QRS amplitude.
+- **Impact:** evaluation code reports both versions; training data unchanged.
+
+### D27 — 2026-09-27 · Sanity check passed (S0, 100%, seed 0)
+- **Result:** fold-10 macro-AUROC over 71 statements **0.9228** (best fold-9 0.9246 at step 6,664 of 6,800;
+  6.1 min on a T4). Published xresnet1d50 on the earlier PTB-XL release: 0.9242 (A1, Table 2). Pipeline accepted.
+- **First E3 numbers (single seed, no CI, not for inference):** fold-10 E3 macro-AUROC 0.976, SPH 0.968,
+  degradation 0.008. SPH per-label AUROC: AF 0.999, PR_PROL 0.994, CRBBB 0.993, IRBBB 0.778, CLBBB 0.999,
+  LAFB 0.990, LVH 0.989, IMI 0.976, ASMI 0.993.
+- **Implication for H2b (flagged, design unchanged):** at 100% labels the supervised baseline is near ceiling on SPH
+  for 8 of 9 labels, so between-arm differences in degradation will be small at this budget. The low-budget end of
+  the curve and IRBBB carry most of the information. IRBBB's drop despite near-identical prevalence in both datasets
+  (5.1% vs 4.9%) is consistent with different site criteria for incomplete RBBB, which AUROC cannot absorb.
+- **Compute revision:** a 100% run takes ~6 min; smaller budgets run 2,000 steps (~2 min). The core fine-tuning grid
+  (4 arms × 5 budgets × 5 seeds) is estimated at ~7 GPU-hours instead of ~20; to be updated after the first SSL run.
