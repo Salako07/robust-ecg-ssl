@@ -141,3 +141,11 @@ supersede them with a new one.
   the authors' 100 Hz PTB-XL files cannot be reproduced on SPH.
 - **Impact:** full-length SPH evaluation becomes a secondary sensitivity analysis.
 - **Evidence:** `docs/preprocessing_v1.md`; filter behaviour tested in `tests/test_data_pipeline.py`.
+
+### D22 — 2026-09-26 · PTB-XL v1.0.3 has 21,799 records (18,869 patients), not 21,837
+- **Evidence:** PhysioNet v1.0.3 page and changelog: v1.0.2 removed 36 records with identical raw waveforms,
+  preferentially from test folds 9–10; v1.0.3 removed two further duplicates. Our cache size matches
+  21,799 × 12 × 1,000 float32 exactly.
+- **Impact:** A1 and A3 used the earlier 21,837-record release, so their fold-10 test sets are not identical
+  to ours. The baseline sanity check (reproducing ≈ 0.92–0.93 macro-AUROC) is therefore approximate;
+  a difference of a few thousandths is not evidence of a pipeline error.

@@ -35,7 +35,7 @@ Last updated: 2026-09-26 (A8, A9 read in full).
 3. **Within ECG, no reviewed study combines an augmentation-matched supervised control with label budgets or external-dataset evaluation.** A5 has the control at full labels only (private data). A8's "Aug Only" arm is not the control we need: it augments 70 labelled records while the SSL arm also sees 16,304 unlabelled ones, so it confounds augmentation with unlabelled-data exposure.
 4. **Additional problems in A8 we found (not raised in A9):**
    - A majority-class predictor on their test set scores Macro-F1 ≈ 0.18 (their own dashed line). The headline SSL result, 0.192 ± 0.003, is barely above it. From their confusion matrix, SR is 1,666 of 2,035 test records (≈ 82%), so a constant SR predictor would reach ≈ 0.82 accuracy; the SSL arm reports 0.331. "Stable" here means stably near-degenerate.
-   - It is not stated whether the 16,304 unlabelled pretraining records exclude the 2,035 test records (21,837 − 16,304 = 5,533 records unaccounted for). If they overlap, pretraining was transductive.
+   - It is not stated whether the 16,304 unlabelled pretraining records exclude the 2,035 test records. The paper cites PTB-XL v1.0.3 but gives the pre-v1.0.2 count (21,837); v1.0.3 has 21,799 records, leaving ≈ 5,500 unaccounted for either way. If pretraining and test records overlap, pretraining was transductive.
    - The single-label 5-class task is carved out of a multi-label dataset; how co-occurring rhythm statements were handled is not described.
 5. **Design lessons we adopt from A8/A9:**
    - Report a constant-predictor reference for every threshold-dependent metric. AUROC (our headline) is 0.5 for any constant predictor, which guards against the degenerate-solution problem.
