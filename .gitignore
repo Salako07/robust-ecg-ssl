@@ -4,7 +4,8 @@ data/
 *.npy
 *.npz
 checkpoints/
-runs/
+/runs/
+*.pt
 wandb/
 
 # environments and caches
@@ -19,3 +20,7 @@ __pycache__/
 Thumbs.db
 .vscode/
 .idea/
+
+# committed results are allowed (small per-run files, including predictions)
+!results/runs/
+!results/runs/**
