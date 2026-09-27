@@ -114,3 +114,8 @@ H3 defined only loosely.
   finished jobs, resumed the rest and left no orphaned processes; the registry had no duplicates. The first version
   left orphaned child processes when killed, which is why signal handling was added.
 - Colab runs moved to `results/pilot_colab/` (D32). Seed 0 will be rerun on Kaggle and compared with the pilot.
+- **Failure 6 — Colab "Save a copy in GitHub" again** (commit d88368f, 01:00). The saved notebook 02 was a stale copy,
+  and its cache-copy cell had reverted to the pre-Failure-5 code. Caught because the next push was rejected; the repo
+  version was kept (merge with `-s ours`). The executed copy is kept as a record in
+  `results/pilot_colab/02_ssl_pretrain_executed.ipynb`: it holds the timing check (0.204 s/step, projected 0.58 h;
+  actual 23.6 min) and the full per-epoch pretraining log. The grid now runs on Kaggle, where this cannot happen.

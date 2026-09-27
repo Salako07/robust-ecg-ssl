@@ -21,3 +21,4 @@ Logs are the console output of the run that produced the matching CSV.
 - `runs/`, `ssl/`: the analysed grid, all from one platform (Kaggle, 2 × T4). Each `config.json` records `platform`,
   `gpu`, `torch` and `cudnn`. `cache_manifest.json` gives the SHA-256 of every cache file the grid read.
 - `logs/`: console output of every grid run.
+- `pilot_colab/02_ssl_pretrain_executed.ipynb`: notebook 02 as executed on Colab (outputs only; its code cells are a stale copy, see lab notebook Failure 6).
