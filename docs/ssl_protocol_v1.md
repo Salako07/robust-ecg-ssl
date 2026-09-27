@@ -58,5 +58,12 @@ These are diagnostics only. They are not used to choose between runs or settings
 
 ## 5. Timing
 
-To be filled in from the first T4 run (`--max-steps` timing, then the full run's `minutes` column).
-The RQ v2 §7 estimate was 2–3 h per run.
+First run (`SSL_ecg-mid_s0`, Colab T4, torch 2.11.0+cu128): 300 epochs × 34 steps = 10,200 steps in **23.6 min**
+in one session (no resume). The RQ v2 §7 estimate of 2–3 h per run was about 6× too high. All 11 planned
+pretraining runs (5 core + 6 H3) now fit in ≈ 4.5 GPU-hours.
+
+## 6. Observation from the first run: the pretext task saturates
+
+In-batch retrieval top-1 reached 0.99 at epoch 9 and 0.999 at epoch 26 (chance ≈ 0.001); NT-Xent loss fell from 3.63
+(epoch 1) to 0.20 (epoch 20) and only to 0.094 by epoch 300. For 90% of training almost every positive is already
+ranked first. This is the risk anticipated in §4 item 3; see D31 for what is and is not concluded from it.

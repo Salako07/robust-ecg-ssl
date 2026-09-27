@@ -15,11 +15,11 @@ Status: ✅ evidence ready · 🟡 partial · ⬜ pending experiments.
 | 4.2 | Label harmonisation | AHA crosswalk; 9 shared labels; excluded concepts and why | E3_protocol_v1; D3–D8, D12 | ✅ |
 | 4.3 | Preprocessing | 500 Hz source, band-pass, 100 Hz, normalisation, windows | preprocessing_v1; D20, D21 | ✅ |
 | 4.4 | Model and training | xresnet1d50 (verified), hyperparameters, budgets, selection | training_protocol_v1; D10, D24 | ✅ |
-| 4.5 | SSL pretraining | SimCLR on folds 1–8, settings, no label-based selection, final-epoch encoder; identical fine-tuning recipe | ssl_protocol_v1; D29, D30; M1 | 🟡 protocol ready; timing pending |
+| 4.5 | SSL pretraining | SimCLR on folds 1–8, settings, no label-based selection, final-epoch encoder; identical fine-tuning recipe | ssl_protocol_v1; D29–D31; M1; results/ssl | ✅ protocol, timing, saturation observation |
 | 4.6 | Augmentations and corruptions | P_ecg, P_gen, strength matching, held-out corruptions | RQ v2 §5; augment.py; D16, D17, D23 | 🟡 corruptions not implemented |
 | 4.7 | Evaluation and statistics | macro-AUROC, degradation, patient bootstrap, Holm | RQ v2 §6; E3 protocol | 🟡 bootstrap not implemented |
 | 5.1 | Sanity check | S0 0.9228 vs 0.9242 published; run files committed | D27; results/runs/S0_b1_s0_lik0 | ✅ |
-| 5.2 | H1 label efficiency | C1 − S1 across budgets | runs | ⬜ |
+| 5.2 | H1 label efficiency | C1 − S1 across budgets | runs; first 100% seed-0 pair (D31) | ⬜ |
 | 5.3 | H2a held-out corruptions | degradation C1 vs S1 | runs | ⬜ |
 | 5.4 | H2b external dataset | E3 degradation C1 vs S1; per-label; criteria vs interpretive; case-mix caveat | runs; D27, D28 | ⬜ |
 | 5.5 | H3 augmentation policy | P_ecg vs P_gen grid | runs | ⬜ |

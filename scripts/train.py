@@ -134,7 +134,7 @@ def main():
             if step % eval_every == 0 or step == total:
                 P = data.predict_windows(model, ev(X, va_idx), dev)
                 auc, n_lab = metrics.macro_auroc(Y[va_idx], P)
-                log.append(dict(step=step, loss=float(loss), val_macro_auroc=auc, minutes=(time.time() - t0) / 60))
+                log.append(dict(step=step, loss=loss.item(), val_macro_auroc=auc, minutes=(time.time() - t0) / 60))
                 if auc > best:
                     best = auc; torch.save(model.state_dict(), os.path.join(rdir, "ckpt_best.pt"))
                 torch.save(dict(model=model.state_dict(), opt=opt.state_dict(), sched=sched.state_dict(),

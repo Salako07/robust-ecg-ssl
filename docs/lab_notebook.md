@@ -93,3 +93,14 @@ H3 defined only loosely.
   infrastructure fault, not a data or code fault; notebook 01 had copied the same file without error. Fix: the copy
   now goes through `robust_ecg.colab_utils.copy_dir_with_retry`, which writes to a `.part` file, checks the size,
   remounts Drive on error and retries. A unit test simulates the drop.
+
+## 2026-09-27 — First SSL run and first S1/C1 pair
+- Notebook 02 ran after the Drive fix. `SSL_ecg-mid_s0` finished in 23.6 min, far below the 2–3 h planned.
+- **Unexpected observation:** the contrastive pretext task is essentially solved by epoch ~10 (retrieval top-1 0.99).
+  Recorded in D31 with two candidate explanations; protocol unchanged because a C1 result had already been seen.
+- First matched pair at 100%, seed 0: S1 0.9265, C1 0.9183 on fold 10; equal on fold 9 (0.9271 vs 0.9268); E3 SPH
+  0.9722 vs 0.9724. C1 learns faster early in fine-tuning; the advantage has gone by ~2,000 steps. Single seed: not evidence.
+- Augmentation alone (S1 vs S0) is +0.004 on fold 10 and +0.005 on SPH E3 at 100%, also single seed.
+- Run files committed: `results/runs/{S1,C1}_b1_s0_lik0`, `results/ssl/SSL_ecg-mid_s0` (encoder kept on Drive, hash recorded).
+- The predictions files hold scores and row indices but not labels, so the bootstrap analysis has to rebuild labels
+  from the caches (on Colab or with the metadata). Noted for the analysis script.

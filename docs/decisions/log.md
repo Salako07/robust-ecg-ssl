@@ -261,3 +261,28 @@ supersede them with a new one.
 - **Planned check (exploratory, not a primary contrast, not Holm-corrected):** C1 fine-tuned with max lr 1e-3 at the
   5% and 100% budgets, seeds 0–2, compared with C1 at 1e-2. It is reported whatever its outcome and is not used to
   replace the primary C1 results.
+
+### D31 — 2026-09-27 · First SSL run and first matched pair (100%, seed 0): observations, no protocol change
+- **SSL run `SSL_ecg-mid_s0`** (`results/ssl/`): 23.6 min on a T4 (estimate was 2–3 h). The contrastive task
+  saturates early: retrieval top-1 ≥ 0.99 from epoch 9 and ≥ 0.999 from epoch 26; final loss 0.094.
+- **Fine-tuning, fold 10, 71 statements (single seed, no CI):** S0 0.9228, S1 0.9265, C1 0.9183.
+  Fold-9 best: S1 0.9271, C1 0.9268 (essentially equal). E3 on SPH: S0 0.9677, S1 0.9722, C1 0.9724;
+  degradation S0 0.0078, S1 0.0053, C1 0.0035. C1 loaded the encoder with SHA-256 `0cc027b0…`, matching the SSL run.
+- **Observation:** C1 is ahead of S1 on fold 9 early in fine-tuning (step 136: 0.596 vs 0.556; step 680: 0.831 vs
+  0.799), and the gap has closed by ~2,000 steps.
+- **What is not concluded:** nothing about H1 or H2. One seed at one budget cannot separate the 0.008 fold-10
+  difference from seed variance, and fold-9 and fold-10 rank C1 and S1 differently. The 100% budget was already
+  expected to be the least informative for H1 (D27).
+- **Interpretations recorded for testing, not claimed:**
+  1. *Saturation.* Retrieval may be solvable from record-specific cues (patient morphology across 12 leads) and from
+     overlap between crops: two uniform 2.5 s starts within 10 s overlap with probability 1 − (500/750)² ≈ 0.56, and
+     with p = 0.5 per transform 12.5% of views are unaugmented. If so, most epochs add little. The H3 grid's
+     high-strength runs partly test whether stronger views change downstream results.
+  2. *Early advantage that fades* is consistent with the D30 concern (high fine-tuning lr overwriting pretrained
+     features) and with pretraining acting mainly as a better starting point at full labels. The D30 lr check and
+     the low budgets distinguish these.
+- **Decision:** no change to the frozen protocol. Changing SSL settings after seeing a C1 result would be a post-hoc
+  choice. Any additional SSL variant (e.g. non-overlapping crops) is added only as a labelled exploratory arm and
+  reported whatever its outcome.
+- **Compute:** SSL 24 min per run and fine-tuning ~6 min at 100% (~2 min below) put the full core grid plus H3 at
+  roughly 12 GPU-hours.
