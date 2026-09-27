@@ -52,6 +52,7 @@ def main():
     meta.to_csv(os.path.join(a.out, "ptbxl_meta.csv"), index=False)
     with open(os.path.join(a.out, "ptbxl_statements.json"), "w") as f:
         json.dump(list(scp.index), f)
+    scp.to_csv(os.path.join(a.out, "scp_statements.csv"))
 
     train = meta["strat_fold"].between(1, 8).to_numpy()
     mean, std = lead_stats(X[train])

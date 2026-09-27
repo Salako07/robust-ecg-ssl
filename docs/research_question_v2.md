@@ -2,6 +2,8 @@
 
 **Status:** v2.1, **frozen 2026-09-26**. Changes require v3 and a decision-log entry.
 v2.1 (same day, before any results): powerline interference removed from P_ecg (D20).
+v2.2 (same day, before any results): random *resized* crop replaced by plain random cropping, shared by
+both policies; muscle noise defined as bursts to distinguish it from stationary Gaussian noise (D23).
 Supersedes the research question and hypotheses in [`plan_v0.md`](plan_v0.md) §2–3.
 Evidence for each claim below is in [`literature_matrix.md`](literature_matrix.md) (IDs A1–B3).
 
@@ -80,13 +82,13 @@ attributable to augmentation, which is itself a publishable finding.
 | Transform | P_ecg | P_gen | Seen corruption for | Held-out corruption |
 |---|:-:|:-:|---|:-:|
 | Baseline wander (low-frequency sinusoids) | ✓ | | P_ecg | |
-| Muscle (EMG-like) noise | ✓ | | P_ecg | |
+| Muscle (EMG-like) noise, in 1–3 short bursts per lead | ✓ | | P_ecg | |
 | Per-lead amplitude scaling, physiological range | ✓ | | P_ecg | |
-| Additive Gaussian noise | | ✓ | P_gen | |
+| Additive Gaussian noise, stationary, all leads | | ✓ | P_gen | |
 | Global amplitude scaling | | ✓ | P_gen | |
 | Random time masking | | ✓ | P_gen | |
 | Time warping | | ✓ | P_gen | |
-| Random resized crop | ✓ | ✓ | both | |
+| Random 2.5 s crop, no resizing | ✓ | ✓ | both | |
 | **Lead dropout (1–3 leads zeroed)** | | | | ✓ |
 | **Limb-lead reversal (LA↔RA)** | | | | ✓ |
 | **Baseline step shift (electrode motion)** | | | | ✓ |

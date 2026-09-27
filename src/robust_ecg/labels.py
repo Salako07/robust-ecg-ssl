@@ -50,3 +50,8 @@ def sph_e3_labels(sph_meta):
     prim = sph_meta["AHA_Code"].apply(sph_primary)
     return np.stack([prim.apply(lambda s: int(bool(s & codes))).to_numpy()
                      for codes in E3_SPH_CODES.values()], axis=1).astype(np.float32)
+
+
+def e3_truth_ptbxl(Y, stmts):
+    """PTB-XL ground truth for E3 labels: positive if any constituent statement is positive."""
+    return e3_scores(Y, stmts)

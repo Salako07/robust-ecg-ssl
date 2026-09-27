@@ -149,3 +149,32 @@ supersede them with a new one.
 - **Impact:** A1 and A3 used the earlier 21,837-record release, so their fold-10 test sets are not identical
   to ours. The baseline sanity check (reproducing ≈ 0.92–0.93 macro-AUROC) is therefore approximate;
   a difference of a few thousandths is not evidence of a pipeline error.
+
+### D14 result — 2026-09-26 · SPH deduplication run
+- **Result:** 168 groups of identical signals, all pairs (336 records). 143 clean pairs → one copy dropped each;
+  25 pairs carried different primary statements → both copies dropped. **193 excluded; 25,577 SPH records remain.**
+  No duplicate group spans two patients.
+- **Impact:** the 25 conflicting pairs (0.1% of SPH) are direct evidence of label noise in the external test set;
+  reported as a limitation. SPH label counts quoted earlier (e.g. CLBBB 84) are pre-deduplication.
+
+### D21 check — 2026-09-26 · Units and amplitude after preprocessing
+- **Result:** both datasets in mV with matching scale. p99 of per-record max |x|: PTB-XL limb leads 1.5–2.4,
+  precordial 2.7–4.1 mV; SPH 1.4–2.0 and 2.9–4.2 mV. No non-finite values; one PTB-XL record with a flat lead (kept).
+
+### D23 — 2026-09-26 · Resized cropping removed; muscle noise defined as bursts (RQ v2.2, before any results)
+- **Reason:** resizing a crop stretches the time axis and changes apparent heart rate, so in the
+  augmentation-matched supervised arm a sinus-tachycardia record could be shown with a normal-rate appearance
+  under its original label. Muscle noise modelled as stationary Gaussian noise would be identical to the generic
+  policy's Gaussian noise, making H3 uninterpretable.
+- **Impact:** both policies share plain random 2.5 s crops (which SimCLR also uses to form two views).
+  P_ecg = baseline wander, muscle-noise bursts, per-lead scaling. P_gen = stationary Gaussian noise, global
+  scaling, time masking, time warping (±10% local speed, which can shift rate-defined labels; accepted as a
+  property of generic augmentation).
+
+### D24 — 2026-09-26 · Training protocol v1
+- **Decision:** xresnet1d50 identical to the benchmark encoder; benchmark hyperparameters (AdamW, wd 1e-2,
+  one-cycle LR 1e-2, batch 128) with a fixed LR for all arms; length max(50 epochs, 2,000 steps); selection by
+  best fold-9 macro-AUROC over 50 evaluation points; mean aggregation over windows.
+- **Evidence:** reference code (`helme/ecg_ptbxl_benchmarking`); encoder verified identical (outputs equal
+  with shared weights). Details: `docs/training_protocol_v1.md`.
+- **Impact:** the S0 100% run is the sanity check against published PTB-XL results before any SSL work.

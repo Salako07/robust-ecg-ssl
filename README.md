@@ -38,6 +38,10 @@ Experiments run on a single T4 in Colab. Caches, checkpoints and results live on
 
 1. Open `notebooks/00_colab_setup.ipynb` in Colab and run all cells once. It downloads PTB-XL and SPH,
    deduplicates SPH and builds the preprocessed caches ([`docs/preprocessing_v1.md`](docs/preprocessing_v1.md)).
+2. `notebooks/01_baseline_sanity.ipynb` (T4): supervised baseline S0 at 100% labels, the check against
+   published PTB-XL results ([`docs/training_protocol_v1.md`](docs/training_protocol_v1.md)).
+
+Never use Colab's *Save a copy in GitHub*: it overwrites the repo's notebooks.
 
 Tests (CPU, synthetic data): `python -m pytest -q tests`.
 
@@ -66,9 +70,10 @@ See [`results/README.md`](results/README.md) for what each output file contains.
 |---|---|
 | Literature review and gap | done; RQ v2 frozen |
 | E3 label harmonisation and support | done |
-| SPH deduplication | script ready, not yet run |
+| SPH deduplication | done: 193 excluded, 25,577 records |
 | Signal preprocessing pipeline | specified and tested; caches built on Colab (notebook 00) |
-| Baselines, SSL, experiments | not started |
+| Supervised baseline | code done and tested on synthetic data; sanity-check run pending |
+| SSL, experiments | not started |
 
 ## License
 
