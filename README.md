@@ -20,6 +20,8 @@ without adaptation? Hypotheses, the 2 × 2 design and primary contrasts:
   (Shandong Provincial Hospital) on 9 shared labels. Full spec: [`docs/E3_protocol_v1.md`](docs/E3_protocol_v1.md).
 - Every design decision, with its evidence: [`docs/decisions/log.md`](docs/decisions/log.md).
 - Literature matrix (source of truth for the review): [`docs/literature_matrix.md`](docs/literature_matrix.md).
+- Lab notebook (chronological record, including failures): [`docs/lab_notebook.md`](docs/lab_notebook.md).
+- Paper outline, each section mapped to its evidence: [`docs/paper_outline.md`](docs/paper_outline.md).
 - Original plan (superseded, kept for the record): [`docs/plan_v0.md`](docs/plan_v0.md).
 
 ## Data (not in this repository)
