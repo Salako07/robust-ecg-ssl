@@ -212,3 +212,20 @@ supersede them with a new one.
   (5.1% vs 4.9%) is consistent with different site criteria for incomplete RBBB, which AUROC cannot absorb.
 - **Compute revision:** a 100% run takes ~6 min; smaller budgets run 2,000 steps (~2 min). The core fine-tuning grid
   (4 arms × 5 budgets × 5 seeds) is estimated at ~7 GPU-hours instead of ~20; to be updated after the first SSL run.
+
+### D28 — 2026-09-27 · "Degradation" is a net of opposite per-label effects; H2b stays a between-arm contrast
+- **Evidence (S0, 100%, seed 0, `results/runs/S0_b1_s0_lik0`):** per-label AUROC fold 10 → SPH:
+  IRBBB 0.975 → 0.778 (drop 0.197); CRBBB 0.997 → 0.993; six labels score *higher* on SPH
+  (LVH 0.949 → 0.989, IMI 0.937 → 0.976, PR_PROL 0.974 → 0.994, ASMI 0.977 → 0.993, AF 0.987 → 0.999,
+  LAFB 0.986 → 0.990). The macro drop of 0.008 is IRBBB's loss partly cancelled by gains elsewhere.
+- **Interpretation (not yet tested):** SPH looks *easier* for most labels, consistent with a case-mix difference:
+  54% of SPH records are normal ECGs and its statements are definitive cardiologist diagnoses, whereas PTB-XL fold 10
+  includes low-likelihood diagnostic statements (e.g. 36% of IMI occurrences have likelihood 15 or 35, D11) and more
+  comorbid negatives. The ≥ 50 likelihood sensitivity analysis (D11) partly tests this for IMI and LVH.
+- **Consequences:**
+  1. Absolute degradation values must not be read as "the shift hurts performance"; negative values mean the external
+     set is easier for that label. Report per-label values alongside the macro value everywhere.
+  2. H2b is unaffected in design: it compares degradation *between arms* on the same two test sets, so test-set
+     difficulty cancels to first order. The pre-registered contrast stands.
+  3. IRBBB is the one label with a real cross-site drop at similar prevalence (5.1% vs 4.9%); site-specific criteria for
+     incomplete RBBB are the leading explanation (to be discussed, not claimed).

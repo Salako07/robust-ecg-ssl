@@ -61,3 +61,11 @@ H3 defined only loosely.
   First E3 numbers: fold-10 0.976, SPH 0.968; IRBBB is the only label that drops markedly (0.778).
 - **Concern recorded, design unchanged:** the supervised baseline is near ceiling on SPH at 100% labels, so H2b has
   little room at that budget (D27).
+
+## 2026-09-27 — S0 results committed; per-label reading
+- Run files for S0 (100%, seed 0) and the SPH dedup outputs committed under `results/` (export from Colab,
+  checked: `done.json` matches the console output; 2,198 fold-10 and 25,577 SPH predictions, all finite).
+- Per-label comparison shows six of nine E3 labels score higher on SPH than on fold 10; only IRBBB drops markedly.
+  The macro "degradation" of 0.008 is a net of opposite effects (D28). Case mix is the leading explanation for the
+  gains; this is recorded as an interpretation to test, not a finding.
+- Environment of the run: Colab, T4, torch 2.11.0+cu128.
