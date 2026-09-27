@@ -54,3 +54,19 @@ def test_macro_auroc_skips_single_class_labels():
     P = np.array([[.9, .1, .2], [.2, .3, .8], [.8, .2, .1], [.1, .1, .9]])
     auc, n = metrics.macro_auroc(Y, P)
     assert n == 2 and auc == 1.0
+
+
+def test_predict_windows_float32_and_raises_on_nonfinite():
+    from robust_ecg import data
+    X = np.random.randn(3, 12, 1000).astype(np.float32)
+    X[1] *= 1e4                                   # extreme amplitudes: must stay finite in float32
+    mean, std = np.zeros((12, 1), np.float32), np.ones((12, 1), np.float32)
+    m = XResNet1d50(5).eval()
+    dl = torch.utils.data.DataLoader(data.EvalWindows(X, [0, 1, 2], mean, std), batch_size=2)
+    P = data.predict_windows(m, dl, torch.device("cpu"))
+    assert P.shape == (3, 5) and np.isfinite(P).all()
+    X[2, 0, 10] = np.nan
+    dl = torch.utils.data.DataLoader(data.EvalWindows(X, [0, 1, 2], mean, std), batch_size=2)
+    import pytest
+    with pytest.raises(FloatingPointError, match=r"\[2\]"):
+        data.predict_windows(m, dl, torch.device("cpu"))

@@ -65,12 +65,20 @@ class EvalWindows(Dataset):
 
 @torch.no_grad()
 def predict_windows(model, loader, device):
-    """Sigmoid outputs averaged over windows -> (N, S) numpy."""
+    """Sigmoid outputs averaged over windows -> (N, S) numpy.
+
+    Runs in float32 (no autocast): FP16 overflowed to NaN on a few SPH records in the first real run.
+    Raises if any output is still non-finite, naming the affected rows of the loader's dataset.
+    """
     model.eval()
     out = []
     for xb in loader:                         # (B, W, 12, CROP)
         b, w = xb.shape[:2]
-        with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=device.type == "cuda"):
-            logits = model(xb.reshape(b * w, *xb.shape[2:]).to(device, non_blocking=True))
+        logits = model(xb.reshape(b * w, *xb.shape[2:]).to(device, non_blocking=True).float())
         out.append(torch.sigmoid(logits.float()).reshape(b, w, -1).mean(1).cpu())
-    return torch.cat(out).numpy()
+    P = torch.cat(out).numpy()
+    bad = np.flatnonzero(~np.isfinite(P).all(axis=1))
+    if len(bad):
+        raise FloatingPointError(f"{len(bad)} records give non-finite predictions even in float32, "
+                                 f"dataset rows e.g. {bad[:10].tolist()}")
+    return P

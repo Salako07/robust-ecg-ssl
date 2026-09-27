@@ -178,3 +178,11 @@ supersede them with a new one.
 - **Evidence:** reference code (`helme/ecg_ptbxl_benchmarking`); encoder verified identical (outputs equal
   with shared weights). Details: `docs/training_protocol_v1.md`.
 - **Impact:** the S0 100% run is the sanity check against published PTB-XL results before any SSL work.
+
+### D25 — 2026-09-27 · Evaluation runs in float32
+- **Evidence:** first real S0 run (100%, seed 0) trained normally (best fold-9 macro-AUROC 0.9246, 6.1 min for
+  6,800 steps on a T4) but SPH prediction under FP16 autocast produced NaN. Suspected cause: FP16 overflow on a
+  few high-amplitude SPH records (to be confirmed with the amplitude diagnostic in notebook 01).
+- **Decision:** all prediction (validation, test, SPH, corruptions) runs in float32; training stays in FP16.
+  Any remaining non-finite output raises an error naming the records instead of producing a metric.
+- **Impact:** negligible cost; removes a precision difference between datasets from the comparison.
