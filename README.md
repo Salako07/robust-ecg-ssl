@@ -44,6 +44,8 @@ Experiments run on a single T4 in Colab. Caches, checkpoints and results live on
    published PTB-XL results ([`docs/training_protocol_v1.md`](docs/training_protocol_v1.md)).
 3. `notebooks/02_ssl_pretrain.ipynb` (T4): SimCLR pretraining of the encoder on PTB-XL folds 1–8 without labels
    ([`docs/ssl_protocol_v1.md`](docs/ssl_protocol_v1.md)).
+4. `notebooks/03_core_grid.ipynb` (T4): the core grid (4 arms × 5 budgets × 5 seeds, plus the exploratory 1%), run as
+   a resumable queue seed by seed.
 
 Never use Colab's *Save a copy in GitHub*: it overwrites the repo's notebooks.
 
