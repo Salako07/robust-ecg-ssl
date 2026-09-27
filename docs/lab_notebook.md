@@ -88,3 +88,8 @@ H3 defined only loosely.
   name. Method references now use the prefix M (M1).
 - Verified from the SimCLR abstract that contrastive learning benefits from larger batches and longer training;
   cited only for that sentence until the full text is read.
+- **Failure 5 — Drive mount dropped during the cache copy** (first attempt at notebook 02): `OSError [Errno 107]
+  Transport endpoint is not connected` while copying `ptbxl_X.npy` (~1 GB) from Drive to local disk. An
+  infrastructure fault, not a data or code fault; notebook 01 had copied the same file without error. Fix: the copy
+  now goes through `robust_ecg.colab_utils.copy_dir_with_retry`, which writes to a `.part` file, checks the size,
+  remounts Drive on error and retries. A unit test simulates the drop.

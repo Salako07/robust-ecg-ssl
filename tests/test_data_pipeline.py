@@ -173,3 +173,25 @@ def test_sph_dedup_fails_when_files_missing(tmp_path):
                        capture_output=True, text=True)
     assert r.returncode != 0 and "A09999" in r.stderr
     assert not (tmp_path / "res" / "sph_exclude.txt").exists()
+
+
+def test_copy_dir_with_retry_recovers_from_dropped_mount(tmp_path, monkeypatch):
+    import shutil
+    from robust_ecg import colab_utils
+    src, dst = tmp_path / "drive", tmp_path / "local"
+    src.mkdir()
+    (src / "a.npy").write_bytes(b"x" * 1000); (src / "b.npy").write_bytes(b"y" * 500)
+    real, calls, remounts = shutil.copyfile, {"n": 0}, []
+
+    def flaky(s, d):                       # second copy dies half-way, like the Drive FUSE mount
+        calls["n"] += 1
+        if calls["n"] == 2:
+            open(d, "wb").write(b"y" * 10)
+            raise OSError(107, "Transport endpoint is not connected")
+        return real(s, d)
+
+    monkeypatch.setattr(colab_utils.shutil, "copyfile", flaky)
+    colab_utils.copy_dir_with_retry(str(src), str(dst), remount=lambda: remounts.append(1), wait=0, log=lambda *_: None)
+    assert (dst / "a.npy").read_bytes() == b"x" * 1000 and (dst / "b.npy").read_bytes() == b"y" * 500
+    assert remounts == [1] and calls["n"] == 3          # a.npy not copied twice
+    assert not list(dst.glob("*.part"))
