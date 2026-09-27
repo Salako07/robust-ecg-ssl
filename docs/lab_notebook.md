@@ -69,3 +69,6 @@ H3 defined only loosely.
   The macro "degradation" of 0.008 is a net of opposite effects (D28). Case mix is the leading explanation for the
   gains; this is recorded as an interpretation to test, not a finding.
 - Environment of the run: Colab, T4, torch 2.11.0+cu128.
+- **Failure 4 — results silently not committed.** `.gitignore` excluded every `runs/` folder and all `*.npz`
+  files, so the first results commit (38f00fb) omitted `results/runs/`. Caught by listing the pushed tree;
+  fixed in the next commit. Check after every results commit: `git ls-tree -r --name-only origin/main results/runs`.
