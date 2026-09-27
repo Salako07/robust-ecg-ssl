@@ -6,7 +6,7 @@
 Resumable: re-running the same command continues from the last checkpoint; a finished run is skipped.
 Every finished run appends one row to <runs>/registry.csv and saves test predictions for bootstrapping.
 """
-import argparse, json, math, os, random, sys, time
+import argparse, hashlib, json, math, os, random, sys, time
 import numpy as np
 import pandas as pd
 import torch
@@ -74,7 +74,7 @@ def main():
     va_idx = np.flatnonzero(meta["strat_fold"].to_numpy() == 9)
     te_idx = np.flatnonzero(meta["strat_fold"].to_numpy() == 10)
     aug = augment.Augment(cfg["aug"], a.aug_strength) if cfg["aug"] else None
-    ds_tr = data.TrainCrops(X, Y, tr_idx, mean, std, augment=aug)
+    ds_tr = data.TrainCrops(X, Y, tr_idx, mean, std)          # augmentation is applied on the GPU per batch
     ev = lambda Xs, idx: DataLoader(data.EvalWindows(Xs, idx, mean, std), batch_size=64,
                                     num_workers=a.workers, pin_memory=dev.type == "cuda")
 
@@ -84,9 +84,11 @@ def main():
 
     # ---- model / optimisation ----
     model = XResNet1d50(len(stmts)).to(dev)
+    enc_sha = None
     if cfg["init"] == "ssl":
+        enc_sha = hashlib.sha256(open(a.pretrained, "rb").read()).hexdigest()
         sd = torch.load(a.pretrained, map_location="cpu")
-        model.encoder.load_state_dict(sd["encoder"] if "encoder" in sd else sd)
+        model.encoder.load_state_dict(sd["encoder"] if "encoder" in sd else sd, strict=True)
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr, weight_decay=a.wd)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=total)
     scaler = torch.amp.GradScaler("cuda", enabled=dev.type == "cuda")
@@ -102,7 +104,7 @@ def main():
     else:
         json.dump(dict(vars(a), run_id=run_id, n_train=len(tr_idx), n_params=count_params(model),
                        total_steps=total, eval_every=eval_every, statements=len(stmts),
-                       augment=aug.name if aug else None, device=str(dev),
+                       augment=aug.name if aug else None, encoder_sha256=enc_sha, device=str(dev),
                        torch=torch.__version__), open(os.path.join(rdir, "config.json"), "w"), indent=1)
     print(f"{run_id}: train={len(tr_idx)} records, {total} steps, eval every {eval_every}, device={dev}")
 
@@ -121,8 +123,11 @@ def main():
     model.train()
     if step < total:
         for xb, yb in dl:
+            xb = xb.to(dev, non_blocking=True)
+            if aug is not None:
+                xb = aug(xb)
             with torch.autocast(device_type=dev.type, dtype=torch.float16, enabled=dev.type == "cuda"):
-                loss = lossf(model(xb.to(dev, non_blocking=True)).float(), yb.to(dev))
+                loss = lossf(model(xb).float(), yb.to(dev))
             opt.zero_grad(set_to_none=True)
             scaler.scale(loss).backward(); scaler.step(opt); scaler.update(); sched.step()
             step += 1

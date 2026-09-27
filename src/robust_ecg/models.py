@@ -83,3 +83,30 @@ class XResNet1d50(nn.Module):
 
 def count_params(m):
     return sum(p.numel() for p in m.parameters())
+
+
+class SimCLRNet(nn.Module):
+    """Encoder + concat pooling + 2-layer MLP projector (512 -> 512 -> 128), as in SimCLR.
+    Only `encoder` is transferred to downstream fine-tuning."""
+
+    def __init__(self, in_ch=12, proj_dim=128):
+        super().__init__()
+        self.encoder = Encoder(in_ch=in_ch)
+        d = 2 * self.encoder.out_dim
+        self.pool = ConcatPool()
+        self.projector = nn.Sequential(nn.Linear(d, d), nn.BatchNorm1d(d), nn.ReLU(inplace=True), nn.Linear(d, proj_dim))
+
+    def forward(self, x):
+        return self.projector(self.pool(self.encoder(x)))
+
+
+def nt_xent(z1, z2, tau):
+    """NT-Xent (SimCLR) loss for a batch of positive pairs; also returns top-1 positive-retrieval accuracy."""
+    z = nn.functional.normalize(torch.cat([z1, z2]), dim=1)
+    n = z1.shape[0]
+    sim = z @ z.t() / tau
+    sim.fill_diagonal_(float("-inf"))
+    target = torch.cat([torch.arange(n, 2 * n), torch.arange(0, n)]).to(z.device)
+    loss = nn.functional.cross_entropy(sim, target)
+    acc = (sim.argmax(1) == target).float().mean()
+    return loss, acc

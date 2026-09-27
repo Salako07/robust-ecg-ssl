@@ -229,3 +229,35 @@ supersede them with a new one.
      difficulty cancels to first order. The pre-registered contrast stands.
   3. IRBBB is the one label with a real cross-site drop at similar prevalence (5.1% vs 4.9%); site-specific criteria for
      incomplete RBBB are the leading explanation (to be discussed, not claimed).
+
+### D29 — 2026-09-27 · SSL pretraining protocol v1 frozen; augmentation moved to the GPU
+- **Decision:** SimCLR on PTB-XL folds 1–8 without labels, batch 512, τ = 0.1, AdamW lr 1e-3 / wd 1e-4,
+  10-epoch warm-up + cosine, 300 epochs, final-epoch encoder transferred (full spec: `docs/ssl_protocol_v1.md`).
+  No SSL hyperparameter is tuned, and no labelled data is used to choose an SSL checkpoint.
+- **Reason:** tuning with fold-9 labels would give SSL arms a selection step the supervised arms do not have;
+  tuning without labels is not possible. Batch 512 is the T4 constraint (RQ v2 §7). M1's abstract states that
+  contrastive learning benefits from larger batches and longer training, so this is recorded as a limitation that
+  may understate SSL, not as a neutral choice.
+- **Engineering change (no protocol change):** augmentations were rewritten as batched GPU operations applied after
+  the batch is moved to the device. The per-sample CPU version was too slow for SimCLR on Colab's 2 CPU cores
+  (two augmented views per record per step). Distributions are unchanged except one detail: in `emg_bursts` the noise
+  sd is now drawn once per lead and shared by that lead's bursts (previously once per burst). S0 is unaffected
+  (no augmentation). No augmented run had been made before the change.
+- **Evidence (synthetic smoke data, CPU):** timing mode, full short run, kill-and-resume (identical per-epoch losses
+  to the uninterrupted run once RNG states were added to the checkpoint), and C1 fine-tuning from the saved encoder.
+  21 unit tests pass, including NT-Xent sanity checks (identical views → retrieval accuracy 1; flat similarities →
+  loss = log(2n − 1)) and strict weight transfer from `SimCLRNet.encoder` to `XResNet1d50.encoder`.
+- **Impact:** C0/C1 runs record `encoder_sha256`; every SSL-arm result is traceable to one pretraining run.
+
+### D30 — 2026-09-27 · SSL arms are fine-tuned with exactly the supervised optimisation
+- **Decision:** C0/C1 fine-tune the whole network with the training protocol v1 recipe used for S0/S1
+  (AdamW, OneCycle max lr 1e-2, same length, same selection on fold 9). No frozen-encoder phase, no lower encoder
+  learning rate, no linear probing.
+- **Reason:** the 2 × 2 design attributes C1 − S1 to the initialisation. Any SSL-specific fine-tuning recipe would
+  add a second difference between the arms.
+- **Risk (recorded before any SSL result):** a peak lr of 1e-2 may overwrite pretrained features, especially at
+  large budgets, which would bias C1 − S1 towards zero. If H1 is null, this is the first alternative explanation a
+  reviewer will raise.
+- **Planned check (exploratory, not a primary contrast, not Holm-corrected):** C1 fine-tuned with max lr 1e-3 at the
+  5% and 100% budgets, seeds 0–2, compared with C1 at 1e-2. It is reported whatever its outcome and is not used to
+  replace the primary C1 results.

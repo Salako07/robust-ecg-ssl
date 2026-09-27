@@ -82,3 +82,21 @@ def predict_windows(model, loader, device):
         raise FloatingPointError(f"{len(bad)} records give non-finite predictions even in float32, "
                                  f"dataset rows e.g. {bad[:10].tolist()}")
     return P
+
+
+class PairCrops(Dataset):
+    """Two independent random 2.5 s crops of the same record (SimCLR views before augmentation). No labels."""
+
+    def __init__(self, X, idx, mean, std):
+        self.X, self.idx, self.mean, self.std = X, np.asarray(idx), mean, std
+
+    def __len__(self):
+        return len(self.idx)
+
+    def _crop(self, r):
+        s = np.random.randint(0, self.X.shape[2] - CROP + 1)
+        return (np.asarray(self.X[r, :, s:s + CROP], np.float32) - self.mean) / self.std
+
+    def __getitem__(self, i):
+        r = self.idx[i]
+        return torch.from_numpy(self._crop(r)), torch.from_numpy(self._crop(r))

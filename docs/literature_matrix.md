@@ -4,7 +4,7 @@ Source of truth for the literature review. **Verification** says what was actual
 *full text*, *abstract*, or *search excerpt only* (treat the last as unverified).
 Columns H1/H2/H3 and "Aug-matched control" are our reading, not the authors' framing.
 
-Last updated: 2026-09-26 (A8, A9 read in full).
+Last updated: 2026-09-27 (M1 added as a method reference; "M" avoids a clash with arm names C0/C1).
 
 ## A. ECG self-supervised learning
 
@@ -27,6 +27,12 @@ Last updated: 2026-09-26 (A8, A9 read in full).
 | B1 | Hendrycks, Mazeika, Kadavath & Song, *Using self-supervised learning can improve model robustness and uncertainty* | NeurIPS 2019 | Images; SSL as auxiliary loss | SSL added to supervised training | SSL improves robustness to adversarial examples, label corruption, common corruptions, and near-distribution OOD detection | abstract |
 | B2 | Zhong et al., *Is self-supervised learning more robust than supervised learning?* | arXiv 2206.05259 (2022) | Images; contrastive vs supervised | **Same data augmentation across methods** | Contrastive learning more robust than supervised to **downstream (test-time)** corruptions; under **pre-training** corruption the picture reverses for pixel/patch corruptions. Attributed to feature uniformity; uniformity regularization improves supervised robustness | full text (HTML); author list not fully verified |
 | B3 | Liu et al., *An empirical study on distribution shift robustness from the perspective of pre-training and data augmentation* | NeurIPS 2022 Workshop on Distribution Shifts | 7 pretrained models × 5 shift datasets × 5 algorithms | Pretraining type and augmentation, jointly | ERM plus data augmentation is competitive when the pretrained model is chosen well | abstract |
+
+## M. Method references (cited for methods, not for the gap)
+
+| # | Paper | Venue | Used for | Claim we rely on | Verification |
+|---|---|---|---|---|---|
+| M1 | Chen, Kornblith, Norouzi & Hinton, *A simple framework for contrastive learning of visual representations* | ICML 2020; arXiv 2002.05709 | SimCLR objective (NT-Xent), MLP projector, two augmented views | "Contrastive learning benefits from larger batch sizes and more training steps compared to supervised learning" (abstract), supporting limitation 1 of ssl_protocol_v1 | abstract (2026-09-27); full text not yet read, so no numbers from it are cited |
 
 ## Implications for the gap (current reading)
 

@@ -72,3 +72,19 @@ H3 defined only loosely.
 - **Failure 4 — results silently not committed.** `.gitignore` excluded every `runs/` folder and all `*.npz`
   files, so the first results commit (38f00fb) omitted `results/runs/`. Caught by listing the pushed tree;
   fixed in the next commit. Check after every results commit: `git ls-tree -r --name-only origin/main results/runs`.
+
+## 2026-09-27 — SSL pretraining code
+- SimCLR pretraining written (`scripts/pretrain_simclr.py`) and the protocol frozen before any real run
+  (`ssl_protocol_v1.md`, D29). SSL arms get the supervised fine-tuning recipe unchanged (D30).
+- **Engineering problem:** the per-sample augmentation ran in DataLoader workers on the CPU. SimCLR needs two
+  augmented views per record per step and Colab gives two CPU cores, so the CPU would have been the bottleneck.
+  Augmentations were rewritten as batched GPU tensor operations. One distributional detail changed (EMG burst noise sd
+  per lead instead of per burst, D29); no augmented run existed yet.
+- **Bug caught in testing:** the first resume test showed the LR schedule continued correctly but losses after the
+  resume differed from the uninterrupted run, because RNG states (crops, augmentations) were not checkpointed. Added;
+  a killed-and-resumed CPU run now reproduces the uninterrupted run's losses exactly. (Fine-tuning runs still
+  re-draw crops/augmentations after a resume, as documented in training_protocol_v1.)
+- **Naming clash avoided:** the SimCLR paper was first entered in the literature matrix as "C1", which is also an arm
+  name. Method references now use the prefix M (M1).
+- Verified from the SimCLR abstract that contrastive learning benefits from larger batches and longer training;
+  cited only for that sentence until the full text is read.

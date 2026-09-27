@@ -42,6 +42,8 @@ Experiments run on a single T4 in Colab. Caches, checkpoints and results live on
    deduplicates SPH and builds the preprocessed caches ([`docs/preprocessing_v1.md`](docs/preprocessing_v1.md)).
 2. `notebooks/01_baseline_sanity.ipynb` (T4): supervised baseline S0 at 100% labels, the check against
    published PTB-XL results ([`docs/training_protocol_v1.md`](docs/training_protocol_v1.md)).
+3. `notebooks/02_ssl_pretrain.ipynb` (T4): SimCLR pretraining of the encoder on PTB-XL folds 1–8 without labels
+   ([`docs/ssl_protocol_v1.md`](docs/ssl_protocol_v1.md)).
 
 Never use Colab's *Save a copy in GitHub*: it overwrites the repo's notebooks.
 
@@ -75,7 +77,8 @@ See [`results/README.md`](results/README.md) for what each output file contains.
 | SPH deduplication | done: 193 excluded, 25,577 records |
 | Signal preprocessing pipeline | specified and tested; caches built on Colab (notebook 00) |
 | Supervised baseline | sanity check passed: fold-10 macro-AUROC 0.9228 (published 0.9242) |
-| SSL, experiments | not started |
+| SSL pretraining | protocol frozen, code tested on synthetic data; first T4 run pending |
+| Fine-tuning grid, corruptions, statistics | not started |
 
 ## License
 
