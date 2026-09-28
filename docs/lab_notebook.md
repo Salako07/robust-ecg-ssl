@@ -119,3 +119,8 @@ H3 defined only loosely.
   version was kept (merge with `-s ours`). The executed copy is kept as a record in
   `results/pilot_colab/02_ssl_pretrain_executed.ipynb`: it holds the timing check (0.204 s/step, projected 0.58 h;
   actual 23.6 min) and the full per-epoch pretraining log. The grid now runs on Kaggle, where this cannot happen.
+- Cache moved to Kaggle as the private dataset `olamidesalako/robust-ecg-ssl-cache` (2026-09-28). It was uploaded
+  directly from Colab with the Kaggle API, so it never passed through a local download: the 7 cache files only,
+  without the intermediate `_ptbxl_chunks`. Byte sizes checked against the Colab listing before upload; all matched.
+  Content identity is verified by the SHA-256 manifest that notebook 03 writes on Kaggle. A first manual download
+  from Drive had been incomplete (4 of 7 files, plus the chunk folder), which is why the API route was used.
