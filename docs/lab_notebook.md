@@ -124,3 +124,19 @@ H3 defined only loosely.
   without the intermediate `_ptbxl_chunks`. Byte sizes checked against the Colab listing before upload; all matched.
   Content identity is verified by the SHA-256 manifest that notebook 03 writes on Kaggle. A first manual download
   from Drive had been incomplete (4 of 7 files, plus the chunk folder), which is why the API route was used.
+
+## 2026-09-29 — Failure 7: first full grid run lost
+- The full grid (125 jobs) ran to completion on Kaggle: the export cell reported `results_export.zip 85.73 MB,
+  623 files`, exactly the expected count. It ran in an **interactive** editor session. The saved version of the
+  notebook had failed after 12 s because the cache dataset was not attached to it (kernel log: `FileNotFoundError: No
+  input dataset with ptbxl_X.npy and sph_X.npy`), so it produced no output.
+- The interactive session ended before the zip was downloaded. Kaggle deletes `/kaggle/working` and `/tmp` of an
+  ended interactive session, so every file was lost: `kaggle kernels output` returned only the failed version's log,
+  and a new session's `/kaggle/working` was empty.
+- No numbers from that run were seen or recorded, so nothing from it can enter the paper and no decision was
+  influenced by it. Cost: ≈ 4 h of Kaggle GPU quota.
+- **Fix:** notebook 03 now refuses to run the queue unless `KAGGLE_KERNEL_RUN_TYPE == 'Batch'` (a saved version), with
+  an explicit override for short tests. The instructions now say that a saved version only sees the inputs attached to
+  the notebook. The grid is rerun as a saved version.
+- Lesson for the reproducibility section: on ephemeral platforms, results count as existing only once they are in
+  durable storage (a saved version's output or this repository).
