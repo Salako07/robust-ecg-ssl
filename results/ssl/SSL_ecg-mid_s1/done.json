@@ -1,0 +1,13 @@
+{
+ "run_id": "SSL_ecg-mid_s1",
+ "policy": "ecg",
+ "strength": "mid",
+ "seed": 1,
+ "epochs": 300,
+ "bs": 512,
+ "tau": 0.1,
+ "final_loss": 0.09608598184936187,
+ "final_top1": 0.9997702205882353,
+ "minutes_last_session": 21.224987045923868,
+ "encoder_sha256": "81d0fc9a3aa05796854bcdcd87e8382eb2143ab66049c5652c5601ae6b3dc0bc"
+}

@@ -80,7 +80,8 @@ See [`results/README.md`](results/README.md) for what each output file contains.
 | Signal preprocessing pipeline | specified and tested; caches built on Colab (notebook 00) |
 | Supervised baseline | sanity check passed: fold-10 macro-AUROC 0.9228 (published 0.9242) |
 | SSL pretraining | first run done (23.6 min on a T4); pretext task saturates early (D31) |
-| Fine-tuning grid, corruptions, statistics | not started |
+| Core grid (4 arms × 6 budgets × 5 seeds) | done on Kaggle; seed-level results in [`docs/results_core_grid_v1.md`](docs/results_core_grid_v1.md) |
+| Patient-level bootstrap, corruptions (H2a), H3 grid | not started |
 
 ## License
 

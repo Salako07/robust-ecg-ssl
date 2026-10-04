@@ -140,3 +140,14 @@ H3 defined only loosely.
   the notebook. The grid is rerun as a saved version.
 - Lesson for the reproducibility section: on ephemeral platforms, results count as existing only once they are in
   durable storage (a saved version's output or this repository).
+
+## 2026-10-04 — Core grid results in the repository
+- The rerun as a saved Kaggle version completed. The user's downloaded output (623 files) was brought in from the
+  connected folder: 120 fine-tuning runs, 5 SSL runs, 125 console logs, cache manifest. Two prediction files failed
+  on the first transfer and succeeded on retry. All integrity checks passed (results_core_grid_v1 §1).
+- **Unexpected and useful:** Colab and Kaggle give bit-identical results for the seed-0 runs, including the SSL
+  encoder file, despite different torch versions. Runs are reproducible across the two platforms on a T4.
+- Seed-level tables written by `scripts/analyze_grid.py`. H1 pattern is null at the seed level; H2b has the
+  hypothesised sign in all five seeds with a very small size. Recorded as observations (D33).
+- Not yet possible here: the patient-level bootstrap, because prediction files hold scores and row indices but not
+  labels or patient IDs. It needs `ptbxl_meta.csv`, `scp_statements.csv` and `sph_meta.csv` from the cache.

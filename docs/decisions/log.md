@@ -306,3 +306,19 @@ supersede them with a new one.
 - **Note on earlier entries:** D28 and D31 cite `results/runs/…` and `results/ssl/…`. Those files now live under
   `results/pilot_colab/` with unchanged contents.
 - **Timing (estimate):** ≈ 7.5 GPU-hours for 125 jobs, so ≈ 4 h wall time on two GPUs.
+
+### D33 — 2026-10-04 · Core grid complete (Kaggle); descriptive results recorded, inference pending
+- **Evidence:** `results/runs/` (120 runs), `results/ssl/` (5 runs), `results/logs/`, `results/cache_manifest.json`,
+  `results/analysis/`. Summary and caveats: `docs/results_core_grid_v1.md`.
+- **Reproducibility finding:** the seed-0 runs made on Colab (pilot, D32) reproduce on Kaggle with identical
+  predictions and an identical SSL encoder hash, across torch 2.11.0 and 2.10.0. The pilot and the grid are the same
+  results, so nothing depends on which copy is used. The grid copy is the analysed one.
+- **Seed-level observations (descriptive):** C1 − S1 on fold 10 at 5% is +0.010 with a seed interval of −0.013 to
+  +0.034 (3 of 5 seeds positive). C1 − S1 degradation on SPH at 100% is −0.0019 (C1 smaller in 5 of 5 seeds). From
+  10% upward all arms are within about ±0.005. At the exploratory 1% budget the unmatched comparison (C0 − S0) shows a
+  larger SSL gain on E3 labels than the matched one (C1 − S1): +0.051 vs +0.025 on fold 10.
+- **Decision:** no hypothesis is declared supported or rejected from these tables. The pre-registered patient-level
+  bootstrap with Holm correction is run first. The 1% observation stays exploratory.
+- **Decision:** the D30 check (C1 at lr 1e-3; 5% and 100%; seeds 0–2) is now required before H1 is written up,
+  because the H1 pattern is null. It remains exploratory and is reported whatever it shows.
+- **Protocol unchanged:** no setting of the SSL or fine-tuning protocol is altered in response to these results.
