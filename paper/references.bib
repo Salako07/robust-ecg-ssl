@@ -1,0 +1,436 @@
+% References for robust-ecg-ssl working paper.
+% Verification status of every entry is listed in REFERENCE_CHECK.md.
+
+% ---------- ECG self-supervised learning ----------
+@article{mehari2022,
+  author  = {Mehari, Temesgen and Strodthoff, Nils},
+  title   = {Self-supervised representation learning from 12-lead {ECG} data},
+  journal = {Computers in Biology and Medicine},
+  volume  = {141},
+  pages   = {105114},
+  year    = {2022},
+  doi     = {10.1016/j.compbiomed.2021.105114}
+}
+
+@inproceedings{soltanieh2022aug,
+  author    = {Soltanieh, Sahar and Etemad, Ali and Hashemi, Javad},
+  title     = {Analysis of augmentations for contrastive {ECG} representation learning},
+  booktitle = {2022 International Joint Conference on Neural Networks (IJCNN)},
+  pages     = {1--10},
+  year      = {2022},
+  publisher = {IEEE},
+  doi       = {10.1109/IJCNN55064.2022.9892600}
+}
+
+@article{soltanieh2024ood,
+  author  = {Soltanieh, Sahar and Hashemi, Javad and Etemad, Ali},
+  title   = {In-distribution and out-of-distribution self-supervised {ECG} representation learning for arrhythmia detection},
+  journal = {IEEE Journal of Biomedical and Health Informatics},
+  volume  = {28},
+  number  = {2},
+  pages   = {789--800},
+  year    = {2024},
+  doi     = {10.1109/JBHI.2023.3331626}
+}
+
+@inproceedings{gopal2021,
+  author    = {Gopal, Bryan and Han, Ryan and Raghupathi, Gautham and Ng, Andrew and Tison, Geoff and Rajpurkar, Pranav},
+  title     = {{3KG}: Contrastive learning of 12-lead electrocardiograms using physiologically-inspired augmentations},
+  booktitle = {Proceedings of Machine Learning for Health},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {158},
+  pages     = {156--167},
+  year      = {2021},
+  publisher = {PMLR}
+}
+
+@article{lai2023,
+  author  = {Lai, Jiewei and Tan, Huixin and Wang, Jinliang and Ji, Lei and Guo, Jun and Han, Baoshi and Shi, Yajun and Feng, Qianjin and Yang, Wei},
+  title   = {Practical intelligent diagnostic algorithm for wearable 12-lead {ECG} via self-supervised learning on large-scale dataset},
+  journal = {Nature Communications},
+  volume  = {14},
+  pages   = {3741},
+  year    = {2023},
+  doi     = {10.1038/s41467-023-39472-8}
+}
+
+@article{dade2026,
+  author  = {Dade, Deekshith and Bergquist, Jake A. and MacLeod, Rob S. and Steinberg, Benjamin A. and Tasdizen, Tolga},
+  title   = {Self-supervised contrastive learning enables robust electrocardiogram-based cardiac classification},
+  journal = {Heart Rhythm O2},
+  volume  = {7},
+  number  = {4},
+  pages   = {757--770},
+  year    = {2026},
+  doi     = {10.1016/j.hroo.2026.01.016}
+}
+
+@article{weimann2025,
+  author  = {Weimann, Kuba and Conrad, Tim O. F.},
+  title   = {Self-supervised pre-training with joint-embedding predictive architecture boosts {ECG} classification performance},
+  journal = {Computers in Biology and Medicine},
+  volume  = {196},
+  pages   = {110809},
+  year    = {2025},
+  doi     = {10.1016/j.compbiomed.2025.110809}
+}
+
+@article{zeng2026,
+  author  = {Zeng, LiuPing and Pan, Jingmei and Lu, YangJie and Pan, Xian},
+  title   = {Stabilizing extreme few-shot {ECG} classification via self-supervised contrastive pretraining},
+  journal = {Annals of Noninvasive Electrocardiology},
+  volume  = {31},
+  number  = {3},
+  pages   = {e70188},
+  year    = {2026},
+  doi     = {10.1111/anec.70188}
+}
+
+@article{ahmed2026,
+  author  = {Ahmed, Faizan and Raza, Ahmed and Aman, Abdullah and Tahir, Hamza},
+  title   = {Critical appraisal of self-supervised contrastive pretraining for extreme few-shot {ECG} classification},
+  journal = {Annals of Noninvasive Electrocardiology},
+  volume  = {31},
+  number  = {4},
+  pages   = {e70216},
+  year    = {2026},
+  doi     = {10.1111/anec.70216}
+}
+
+@inproceedings{kiyasseh2021,
+  author    = {Kiyasseh, Dani and Zhu, Tingting and Clifton, David A.},
+  title     = {{CLOCS}: Contrastive learning of cardiac signals across space, time, and patients},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {139},
+  pages     = {5606--5615},
+  year      = {2021},
+  publisher = {PMLR}
+}
+
+@inproceedings{raghu2022,
+  author    = {Raghu, Aniruddh and Shanmugam, Divya and Pomerantsev, Eugene and Guttag, John and Stultz, Collin M.},
+  title     = {Data augmentation for electrocardiograms},
+  booktitle = {Proceedings of the Conference on Health, Inference, and Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {174},
+  pages     = {282--310},
+  year      = {2022},
+  publisher = {PMLR}
+}
+
+% ---------- Self-supervised learning, pretraining and augmentation outside ECG ----------
+@inproceedings{chen2020simclr,
+  author    = {Chen, Ting and Kornblith, Simon and Norouzi, Mohammad and Hinton, Geoffrey},
+  title     = {A simple framework for contrastive learning of visual representations},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {119},
+  pages     = {1597--1607},
+  year      = {2020},
+  publisher = {PMLR}
+}
+
+@misc{oord2018cpc,
+  author       = {van den Oord, Aaron and Li, Yazhe and Vinyals, Oriol},
+  title        = {Representation learning with contrastive predictive coding},
+  year         = {2018},
+  howpublished = {arXiv preprint arXiv:1807.03748}
+}
+
+@inproceedings{hendrycks2019ssl,
+  author    = {Hendrycks, Dan and Mazeika, Mantas and Kadavath, Saurav and Song, Dawn},
+  title     = {Using self-supervised learning can improve model robustness and uncertainty},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {32},
+  year      = {2019}
+}
+
+@misc{zhong2022,
+  author       = {Zhong, Yuanyi and Tang, Haoran and Chen, Junkun and Peng, Jian and Wang, Yu-Xiong},
+  title        = {Is self-supervised learning more robust than supervised learning?},
+  year         = {2022},
+  howpublished = {arXiv preprint arXiv:2206.05259}
+}
+
+@misc{liu2022shift,
+  author       = {Liu, Ziquan and Xu, Yuanhong and Qian, Qi and Li, Hao and Jin, Rong and Ji, Xiangyang and Chan, Antoni B.},
+  title        = {An empirical study on distribution shift robustness from the perspective of pre-training and data augmentation},
+  year         = {2022},
+  howpublished = {NeurIPS 2022 Workshop on Distribution Shifts; arXiv preprint arXiv:2205.12753}
+}
+
+@inproceedings{zoph2020,
+  author    = {Zoph, Barret and Ghiasi, Golnaz and Lin, Tsung-Yi and Cui, Yin and Liu, Hanxiao and Cubuk, Ekin D. and Le, Quoc V.},
+  title     = {Rethinking pre-training and self-training},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {33},
+  pages     = {3833--3845},
+  year      = {2020}
+}
+
+@inproceedings{he2019rethinking,
+  author    = {He, Kaiming and Girshick, Ross and Doll{\'a}r, Piotr},
+  title     = {Rethinking {ImageNet} pre-training},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages     = {4918--4927},
+  year      = {2019}
+}
+
+@inproceedings{oliver2018,
+  author    = {Oliver, Avital and Odena, Augustus and Raffel, Colin and Cubuk, Ekin D. and Goodfellow, Ian J.},
+  title     = {Realistic evaluation of deep semi-supervised learning algorithms},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {31},
+  year      = {2018}
+}
+
+@inproceedings{hendrycks2019corruptions,
+  author    = {Hendrycks, Dan and Dietterich, Thomas},
+  title     = {Benchmarking neural network robustness to common corruptions and perturbations},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2019}
+}
+
+@inproceedings{koh2021,
+  author    = {Koh, Pang Wei and Sagawa, Shiori and Marklund, Henrik and Xie, Sang Michael and Zhang, Marvin and Balsubramani, Akshay and Hu, Weihua and Yasunaga, Michihiro and Phillips, Richard Lanas and Gao, Irena and others},
+  title     = {{WILDS}: A benchmark of in-the-wild distribution shifts},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {139},
+  pages     = {5637--5664},
+  year      = {2021},
+  publisher = {PMLR}
+}
+
+@article{zech2018,
+  author  = {Zech, John R. and Badgeley, Marcus A. and Liu, Manway and Costa, Anthony B. and Titano, Joseph J. and Oermann, Eric Karl},
+  title   = {Variable generalization performance of a deep learning model to detect pneumonia in chest radiographs: A cross-sectional study},
+  journal = {PLoS Medicine},
+  volume  = {15},
+  number  = {11},
+  pages   = {e1002683},
+  year    = {2018},
+  doi     = {10.1371/journal.pmed.1002683}
+}
+
+% ---------- ECG deep learning, datasets and standards ----------
+@article{hannun2019,
+  author  = {Hannun, Awni Y. and Rajpurkar, Pranav and Haghpanahi, Masoumeh and Tison, Geoffrey H. and Bourn, Codie and Turakhia, Mintu P. and Ng, Andrew Y.},
+  title   = {Cardiologist-level arrhythmia detection and classification in ambulatory electrocardiograms using a deep neural network},
+  journal = {Nature Medicine},
+  volume  = {25},
+  number  = {1},
+  pages   = {65--69},
+  year    = {2019},
+  doi     = {10.1038/s41591-018-0268-3}
+}
+
+@article{ribeiro2020,
+  author  = {Ribeiro, Ant{\^o}nio H. and Ribeiro, Manoel Horta and Paix{\~a}o, Gabriela M. M. and Oliveira, Derick M. and Gomes, Paulo R. and Canazart, J{\'e}ssica A. and Ferreira, Milton P. S. and Andersson, Carl R. and Macfarlane, Peter W. and Meira, Jr., Wagner and Sch{\"o}n, Thomas B. and Ribeiro, Antonio Luiz P.},
+  title   = {Automatic diagnosis of the 12-lead {ECG} using a deep neural network},
+  journal = {Nature Communications},
+  volume  = {11},
+  pages   = {1760},
+  year    = {2020},
+  doi     = {10.1038/s41467-020-15432-4}
+}
+
+@article{wagner2020,
+  author  = {Wagner, Patrick and Strodthoff, Nils and Bousseljot, Ralf-Dieter and Kreiseler, Dieter and Lunze, Fatima I. and Samek, Wojciech and Schaeffter, Tobias},
+  title   = {{PTB-XL}, a large publicly available electrocardiography dataset},
+  journal = {Scientific Data},
+  volume  = {7},
+  pages   = {154},
+  year    = {2020},
+  doi     = {10.1038/s41597-020-0495-6}
+}
+
+@misc{wagner2022physionet,
+  author       = {Wagner, Patrick and Strodthoff, Nils and Bousseljot, Ralf-Dieter and Samek, Wojciech and Schaeffter, Tobias},
+  title        = {{PTB-XL}, a large publicly available electrocardiography dataset (version 1.0.3)},
+  year         = {2022},
+  howpublished = {PhysioNet},
+  doi          = {10.13026/kfzx-aw45}
+}
+
+@article{goldberger2000,
+  author  = {Goldberger, Ary L. and Amaral, Lu{\'i}s A. N. and Glass, Leon and Hausdorff, Jeffrey M. and Ivanov, Plamen Ch. and Mark, Roger G. and Mietus, Joseph E. and Moody, George B. and Peng, Chung-Kang and Stanley, H. Eugene},
+  title   = {{PhysioBank}, {PhysioToolkit}, and {PhysioNet}: Components of a new research resource for complex physiologic signals},
+  journal = {Circulation},
+  volume  = {101},
+  number  = {23},
+  pages   = {e215--e220},
+  year    = {2000},
+  doi     = {10.1161/01.CIR.101.23.e215}
+}
+
+@article{strodthoff2021,
+  author  = {Strodthoff, Nils and Wagner, Patrick and Schaeffter, Tobias and Samek, Wojciech},
+  title   = {Deep learning for {ECG} analysis: Benchmarks and insights from {PTB-XL}},
+  journal = {IEEE Journal of Biomedical and Health Informatics},
+  volume  = {25},
+  number  = {5},
+  pages   = {1519--1528},
+  year    = {2021},
+  doi     = {10.1109/JBHI.2020.3022989}
+}
+
+@article{liu2022sph,
+  author  = {Liu, Hui and Chen, Dan and Chen, Da and Zhang, Xiyu and Li, Huijie and Bian, Lipan and Shu, Minglei and Wang, Yinglong},
+  title   = {A large-scale multi-label 12-lead electrocardiogram database with standardized diagnostic statements},
+  journal = {Scientific Data},
+  volume  = {9},
+  pages   = {272},
+  year    = {2022},
+  doi     = {10.1038/s41597-022-01403-5}
+}
+
+@article{leinonen2024,
+  author  = {Leinonen, Tuija and Wong, David and Vasankari, Antti and Wahab, Ali and Nadarajah, Ramesh and Kaisti, Matti and Airola, Antti},
+  title   = {Empirical investigation of multi-source cross-validation in clinical {ECG} classification},
+  journal = {Computers in Biology and Medicine},
+  volume  = {183},
+  pages   = {109271},
+  year    = {2024},
+  doi     = {10.1016/j.compbiomed.2024.109271}
+}
+
+@article{perezalday2020,
+  author  = {Perez Alday, Erick A. and Gu, Annie and Shah, Amit J. and Robichaux, Chad and Wong, An-Kwok Ian and Liu, Chengyu and Liu, Feifei and Rad, Ali Bahrami and Elola, Andoni and Seyedi, Salman and Li, Qiao and Sharma, Ashish and Clifford, Gari D. and Reyna, Matthew A.},
+  title   = {Classification of 12-lead {ECGs}: the {PhysioNet/Computing in Cardiology Challenge} 2020},
+  journal = {Physiological Measurement},
+  volume  = {41},
+  number  = {12},
+  pages   = {124003},
+  year    = {2020},
+  doi     = {10.1088/1361-6579/abc960}
+}
+
+@article{zheng2020,
+  author  = {Zheng, Jianwei and Zhang, Jianming and Danioko, Sidy and Yao, Hai and Guo, Hangyuan and Rakovski, Cyril},
+  title   = {A 12-lead electrocardiogram database for arrhythmia research covering more than 10,000 patients},
+  journal = {Scientific Data},
+  volume  = {7},
+  pages   = {48},
+  year    = {2020},
+  doi     = {10.1038/s41597-020-0386-x}
+}
+
+@article{mason2007,
+  author  = {Mason, Jay W. and Hancock, E. William and Gettes, Leonard S.},
+  title   = {Recommendations for the standardization and interpretation of the electrocardiogram: Part {II}: Electrocardiography diagnostic statement list},
+  journal = {Journal of the American College of Cardiology},
+  volume  = {49},
+  number  = {10},
+  pages   = {1128--1135},
+  year    = {2007},
+  doi     = {10.1016/j.jacc.2007.01.025}
+}
+
+@article{kligfield2007,
+  author  = {Kligfield, Paul and Gettes, Leonard S. and Bailey, James J. and Childers, Rory and Deal, Barbara J. and Hancock, E. William and van Herpen, Gerard and Kors, Jan A. and Macfarlane, Peter and Mirvis, David M. and others},
+  title   = {Recommendations for the standardization and interpretation of the electrocardiogram: Part {I}: The electrocardiogram and its technology},
+  journal = {Journal of the American College of Cardiology},
+  volume  = {49},
+  number  = {10},
+  pages   = {1109--1127},
+  year    = {2007},
+  doi     = {10.1016/j.jacc.2007.01.024}
+}
+
+@inproceedings{moody1984,
+  author    = {Moody, George B. and Muldrow, W. K. and Mark, Roger G.},
+  title     = {A noise stress test for arrhythmia detectors},
+  booktitle = {Computers in Cardiology},
+  volume    = {11},
+  pages     = {381--384},
+  year      = {1984}
+}
+
+@article{batchvarov2007,
+  author  = {Batchvarov, Velislav N. and Malik, Marek and Camm, A. John},
+  title   = {Incorrect electrode cable connection during electrocardiographic recording},
+  journal = {Europace},
+  volume  = {9},
+  number  = {11},
+  pages   = {1081--1090},
+  year    = {2007},
+  doi     = {10.1093/europace/eum192}
+}
+
+% ---------- Methods ----------
+@inproceedings{he2016,
+  author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  title     = {Deep residual learning for image recognition},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  pages     = {770--778},
+  year      = {2016}
+}
+
+@inproceedings{he2019bag,
+  author    = {He, Tong and Zhang, Zhi and Zhang, Hang and Zhang, Zhongyue and Xie, Junyuan and Li, Mu},
+  title     = {Bag of tricks for image classification with convolutional neural networks},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages     = {558--567},
+  year      = {2019}
+}
+
+@inproceedings{loshchilov2019adamw,
+  author    = {Loshchilov, Ilya and Hutter, Frank},
+  title     = {Decoupled weight decay regularization},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2019}
+}
+
+@inproceedings{loshchilov2017sgdr,
+  author    = {Loshchilov, Ilya and Hutter, Frank},
+  title     = {{SGDR}: Stochastic gradient descent with warm restarts},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2017}
+}
+
+@inproceedings{smith2019,
+  author    = {Smith, Leslie N. and Topin, Nicholay},
+  title     = {Super-convergence: Very fast training of neural networks using large learning rates},
+  booktitle = {Artificial Intelligence and Machine Learning for Multi-Domain Operations Applications},
+  series    = {Proceedings of SPIE},
+  volume    = {11006},
+  pages     = {1100612},
+  year      = {2019},
+  doi       = {10.1117/12.2520589}
+}
+
+@inproceedings{micikevicius2018,
+  author    = {Micikevicius, Paulius and Narang, Sharan and Alben, Jonah and Diamos, Gregory and Elsen, Erich and Garcia, David and Ginsburg, Boris and Houston, Michael and Kuchaiev, Oleksii and Venkatesh, Ganesh and Wu, Hao},
+  title     = {Mixed precision training},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2018}
+}
+
+@article{holm1979,
+  author  = {Holm, Sture},
+  title   = {A simple sequentially rejective multiple test procedure},
+  journal = {Scandinavian Journal of Statistics},
+  volume  = {6},
+  number  = {2},
+  pages   = {65--70},
+  year    = {1979}
+}
+
+@book{efron1993,
+  author    = {Efron, Bradley and Tibshirani, Robert J.},
+  title     = {An Introduction to the Bootstrap},
+  publisher = {Chapman \& Hall},
+  address   = {New York},
+  year      = {1993}
+}
+
+@inproceedings{bouthillier2021,
+  author    = {Bouthillier, Xavier and Delaunay, Pierre and Bronzi, Mirko and Trofimov, Assya and Nichyporuk, Brennan and Szeto, Justin and Mohammadi Sepahvand, Nazanin and Raff, Edward and Madan, Kanika and Voleti, Vikram and others},
+  title     = {Accounting for variance in machine learning benchmarks},
+  booktitle = {Proceedings of Machine Learning and Systems},
+  volume    = {3},
+  pages     = {747--769},
+  year      = {2021}
+}

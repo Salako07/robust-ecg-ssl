@@ -1,0 +1,314 @@
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+% Placeholders that must be resolved before submission are printed in red.
+\newcommand{\todo}[1]{\textcolor{red}{[TO DO: #1]}}
+
+\journal{Computers in Biology and Medicine}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Does self-supervised pretraining still help ECG classification once supervised baselines see the same augmentations? A controlled study of label efficiency, held-out corruptions and cross-hospital transfer}
+
+\author{\todo{author names, affiliations and corresponding-author e-mail}}
+
+\begin{abstract}
+\todo{Abstract to be written once the pre-specified inference (patient-level bootstrap, held-out corruptions, augmentation-policy grid) is complete.}
+\end{abstract}
+
+\begin{keyword}
+electrocardiogram \sep self-supervised learning \sep contrastive learning \sep data augmentation \sep distribution shift \sep external validation \sep label efficiency
+\end{keyword}
+
+\end{frontmatter}
+
+%% ======================================================================
+\section{Introduction}
+\label{sec:intro}
+
+The 12-lead electrocardiogram (ECG) is among the most widely used diagnostic tests in medicine, and deep neural networks trained on large annotated collections can now classify rhythm and morphology abnormalities at a level comparable to cardiologists \cite{hannun2019,ribeiro2020}. These results rest on hundreds of thousands to millions of labelled recordings. Most institutions do not have labels at that scale: expert annotation is slow and expensive, and the largest openly available, clinically annotated 12-lead datasets contain tens of thousands of recordings \cite{wagner2020,liu2022sph,zheng2020}. Unlabelled ECGs, in contrast, are produced in large numbers by routine care.
+
+Self-supervised learning (SSL) is the natural response to this imbalance. An encoder is first pretrained on unlabelled signals with a pretext objective and is then fine-tuned on the available labels. For ECG, contrastive pretraining has been reported to improve downstream classification, to reduce the number of labels needed for a given performance, and to make models more robust to physiological noise \cite{mehari2022}; to transfer between ECG datasets \cite{soltanieh2024ood}; and to benefit from augmentations designed around cardiac physiology \cite{gopal2021}. Studies on very large private or pooled collections also report gains from pretraining \cite{lai2023,weimann2025}, in one case largest when labels are scarcest \cite{dade2026}.
+
+These comparisons share a design feature that makes the size of the SSL effect hard to interpret. Contrastive methods learn by making two augmented views of the same recording agree \cite{chen2020simclr}, so the pretrained encoder has been exposed to a family of signal transformations. The supervised baseline it is compared with is usually trained without those transformations \cite{mehari2022,soltanieh2024ood,weimann2025}. The two arms then differ in two respects at once, the initialisation and the exposure to augmentation, and the reported gain is the sum of both. Data augmentation alone is known to help ECG classifiers when labels are limited, although its effect depends on the task \cite{raghu2022}. In the one ECG study we found that includes an augmentation-matched supervised model, most of the improvement at the full label budget was obtained by augmentation alone \cite{lai2023}. Work on natural images points the same way: the benefit of pretraining shrinks as augmentation becomes stronger and labels more plentiful \cite{zoph2020}, and reported advantages of label-efficient methods narrow when baselines receive equal care \cite{oliver2018}.
+
+Two further features limit what existing ECG results say about robustness. First, robustness has been tested with noise from the same family as the pretraining augmentations \cite{mehari2022}, so part of the advantage is expected by construction. Second, ``out-of-distribution'' evaluation has meant pretraining on one dataset and fine-tuning on labels from the target dataset \cite{soltanieh2024ood}. That setting does not describe deployment, in which a trained model is applied to recordings from another hospital without any adaptation, and in which performance can fall for reasons that have little to do with the signal itself \cite{zech2018,leinonen2024}.
+
+This paper asks a narrower question than ``does SSL help?''. \emph{When supervised and contrastively pretrained ECG models receive the same augmentation policy, does self-supervised pretraining still improve (a) diagnostic performance under limited labels, (b) robustness to signal corruptions that no model saw during training, and (c) performance on an external hospital dataset without adaptation?} We answer it with a $2\times2$ factorial design that crosses initialisation (random or contrastively pretrained) with augmentation during supervised training (none or the pretraining policy). The primary comparison is between the two arms that share the augmentation policy and differ only in initialisation. Models are trained on PTB-XL \cite{wagner2020} at five label budgets and evaluated on its held-out test fold, on a suite of corruptions excluded from every augmentation policy, and on the Shandong Provincial Hospital (SPH) database \cite{liu2022sph} with no fine-tuning, threshold selection or model selection on the external data.
+
+The study makes four contributions.
+\begin{enumerate}
+  \item \textbf{An augmentation-matched comparison for ECG.} The factorial design separates the effect of contrastive initialisation from the effect of augmentation and estimates their interaction, across a controlled label-budget curve with nested, patient-level subsets and five training seeds per cell.
+  \item \textbf{A zero-adaptation cross-hospital protocol.} We define nine diagnostic labels shared between PTB-XL and SPH using the dataset authors' own mapping to the AHA/ACC/HRS statement list \cite{mason2007}, document every concept that could not be mapped, and remove duplicated recordings from the external set before use.
+  \item \textbf{A corruption suite split into seen and held-out transformations.} Robustness is tested only on corruptions that appear in no augmentation policy, so that an advantage cannot be produced by the pretraining recipe itself.
+  \item \textbf{A pre-specified, fully traceable analysis.} The research question, hypotheses, primary contrasts and protocols were fixed in a public, version-controlled repository before the corresponding results existed. Every design decision is logged with its evidence, and all run configurations, logs and predictions are released.
+\end{enumerate}
+
+The study is deliberately small in scale: one encoder architecture, one contrastive method, pretraining on the training portion of PTB-XL only, and a single commodity GPU. It does not aim for state-of-the-art performance. Its purpose is a comparison in which the arms differ in one factor at a time, and we committed in advance to reporting a result against our hypotheses with the same prominence as a result in favour. \todo{One or two sentences summarising the findings, to be added after the pre-specified inference.}
+
+Section~\ref{sec:related} reviews prior work, Section~\ref{sec:design} states the research question, hypotheses and design, and Section~\ref{sec:methods} describes the data, models, training and evaluation.
+
+%% ======================================================================
+\section{Related work}
+\label{sec:related}
+
+\subsection{Self-supervised learning for ECG}
+
+Early contrastive methods for cardiac signals defined positive pairs from the structure of the recording itself, for example across leads, across time and across recordings of the same patient \cite{kiyasseh2021}. Mehari and Strodthoff \cite{mehari2022} gave the first broad assessment on clinical 12-lead data. They pretrained several SSL methods, including SimCLR \cite{chen2020simclr} and contrastive predictive coding \cite{oord2018cpc}, on a pool of public datasets and evaluated on PTB-XL. They reported that the best method improved downstream performance over purely supervised training, improved label efficiency, and increased robustness to physiological noise. Their supervised baselines were trained with random cropping only, and the noise used in the robustness test belonged to the same family as the ``physiological'' augmentations used in pretraining.
+
+Subsequent work examined the augmentations themselves. Soltanieh et al.\ \cite{soltanieh2022aug} varied augmentation settings for contrastive ECG pretraining and found that downstream performance depends on them. Gopal et al.\ \cite{gopal2021} proposed augmentations defined in vectorcardiographic space and reported a 9.1\% increase in mean AUC over the best self-supervised baseline when fine-tuning on 1\% of the labels; the comparison was against other SSL methods. Raghu et al.\ \cite{raghu2022} studied augmentation for supervised ECG models and concluded that the benefit of a given augmentation is highly task dependent, which is a reason to treat augmentation as an experimental factor in its own right.
+
+A second line of work scaled up the pretraining data. Lai et al.\ \cite{lai2023} pretrained on about 658,000 wearable 12-lead ECGs from a private collection. Their ablation is, to our knowledge, the only ECG result with an augmentation-matched supervised model: at the full label budget, adding augmentation to supervised training recovered most of the gain, and adding pretraining on top of augmentation gave a further improvement that was not statistically significant. The control was not repeated at reduced label budgets or on external data without retraining. Dade et al.\ \cite{dade2026} pretrained on roughly one million ECGs and found consistent gains over randomly initialised models from 1\% to 100\% of labels across five seeds, on two binary tasks from a private dataset. Weimann and Conrad \cite{weimann2025} pretrained a joint-embedding predictive architecture, which does not rely on hand-crafted augmentations, on more than one million records from ten public databases and reported strong PTB-XL results; their baselines were random initialisation and other SSL methods.
+
+Most recently, Zeng et al.\ \cite{zeng2026} studied an extreme few-shot setting on PTB-XL with 14 labelled recordings per class for five rhythm classes, and reported that SimCLR pretraining stabilised training. Their design includes an ``augmentation only'' arm, but that arm augments the 70 labelled recordings while the SSL arm additionally sees about 16,000 unlabelled recordings, so it does not separate augmentation from access to unlabelled data. A published critique noted that the conclusions rest on three seeds and lack confidence intervals or hypothesis tests \cite{ahmed2026}. We adopt two lessons from this exchange: enough seeds to support the claims made, and a headline metric for which a constant predictor scores at chance.
+
+\subsection{Is the gain due to pretraining or to augmentation?}
+
+Outside ECG, the value of pretraining has been re-examined several times once baselines were strengthened. He et al.\ \cite{he2019rethinking} showed that object detectors trained from random initialisation can match ImageNet-pretrained ones given a suitable schedule, with pretraining mainly speeding up convergence. Zoph et al.\ \cite{zoph2020} found that stronger data augmentation and more labelled data both reduce the value of pretraining. Oliver et al.\ \cite{oliver2018} made the general methodological point for semi-supervised learning: differences between methods narrow when supervised baselines are given the same tuning effort and regularisation.
+
+For robustness specifically, the evidence is mixed and therefore informative. Hendrycks et al.\ \cite{hendrycks2019ssl} showed that adding a self-supervised objective to supervised training improves robustness to common corruptions and label noise. Zhong et al.\ \cite{zhong2022} compared contrastive and supervised learning under identical data augmentation and found contrastive models more robust to corruptions applied at test time. Liu et al.\ \cite{liu2022shift} studied pretraining and augmentation jointly across several distribution-shift benchmarks and found that empirical risk minimisation with data augmentation is competitive when the pretrained model is well chosen. The augmentation-matched comparison is therefore not new in machine learning. What has not been established is whether its conclusions carry over to ECG, where the image result of Zhong et al.\ predicts a retained robustness advantage for contrastive pretraining and the result of Lai et al.\ suggests little retained advantage in clean performance.
+
+\subsection{Robustness to corruption and cross-dataset evaluation}
+
+Benchmarks of common corruptions \cite{hendrycks2019corruptions} and of naturally occurring distribution shift \cite{koh2021} have made it standard in computer vision to report performance under conditions that differ from training. For ECG, the classical noise categories are baseline wander, muscle artefact and electrode-motion artefact \cite{moody1984}, and technical errors such as limb-lead reversal are common in practice \cite{batchvarov2007}. A robustness test is only informative about generalisation if the test corruptions were not available to the model during training; when they coincide with the training augmentations, the test measures in-distribution performance on augmented data.
+
+Performance of medical models can drop substantially between institutions \cite{zech2018}. Multi-source ECG challenges were designed with this in mind \cite{perezalday2020}, and Leinonen et al.\ \cite{leinonen2024} showed that standard cross-validation systematically overestimates ECG classification performance on a new source compared with leave-source-out validation. Within ECG SSL, cross-dataset evaluation has so far involved fine-tuning on target labels \cite{soltanieh2024ood,lai2023}. Cross-dataset evaluation without adaptation also requires that labels mean the same thing in both datasets, which is not guaranteed when labels are harmonised through a third vocabulary; we return to this in Section~\ref{sec:labels}.
+
+\subsection{Summary of the gap}
+
+Table~\ref{tab:prior} summarises the ECG studies discussed above along the four design properties that matter for our question. No study we reviewed combines (i) an augmentation-matched supervised control, (ii) a controlled label-budget curve, (iii) corruptions held out from every augmentation policy, and (iv) evaluation on an external hospital dataset without adaptation. The present study is designed to provide that combination.
+
+\begin{table}[t]
+\centering
+\caption{Design properties of prior ECG self-supervised learning studies, as we read them. ``Aug.-matched control'': a supervised model trained with the same augmentations as the SSL arm. ``External, no adaptation'': evaluation on a dataset from another institution without fine-tuning on it.}
+\label{tab:prior}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccc}
+\toprule
+Study & Aug.-matched & Label-budget & Held-out & External, \\
+      & control      & curve        & corruptions & no adaptation \\
+\midrule
+Mehari and Strodthoff \cite{mehari2022}   & No & Yes & No (seen noise) & No \\
+Soltanieh et al.\ \cite{soltanieh2022aug} & No & Partial & No & No \\
+Gopal et al.\ \cite{gopal2021}            & No & Yes & No & No \\
+Lai et al.\ \cite{lai2023}                & Full labels only & Yes & No & No (retrained) \\
+Soltanieh et al.\ \cite{soltanieh2024ood} & No & No & No & No (fine-tuned) \\
+Weimann and Conrad \cite{weimann2025}     & No & No & No & No \\
+Dade et al.\ \cite{dade2026}              & No & Yes & No & No \\
+Zeng et al.\ \cite{zeng2026}              & Not matched & No (one size) & No & No \\
+\midrule
+This study                                & Yes & Yes & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ======================================================================
+\section{Research question, hypotheses and design}
+\label{sec:design}
+
+\subsection{Factorial design}
+
+All models share one architecture, one training set and one fine-tuning recipe. They differ in two binary factors (Table~\ref{tab:arms}). Arm S0 is the supervised baseline as it usually appears in prior work, and C0 is contrastive pretraining as usually reported. Arm S1 is the augmentation-matched supervised control, and C1 is its pretrained counterpart. The \emph{primary contrast is C1 $-$ S1}: the two arms have the same architecture, data, label budget, augmentation policy and optimisation schedule, and differ only in initialisation. S1 $-$ S0 estimates the effect of augmentation alone, C0 $-$ S0 reproduces the conventional comparison, and the layout gives the interaction between the two factors.
+
+\begin{table}[t]
+\centering
+\caption{The four arms of the $2\times2$ design. $P$ is the augmentation policy, used both for contrastive pretraining and, where indicated, during supervised training (Section~\ref{sec:augment}).}
+\label{tab:arms}
+\footnotesize
+\begin{tabular}{llll}
+\toprule
+Arm & Initialisation & Training augmentation & Role \\
+\midrule
+S0 & Random      & None & Usual baseline in prior work \\
+S1 & Random      & $P$  & Augmentation-matched control \\
+C0 & Contrastive & None & SSL as usually reported \\
+C1 & Contrastive & $P$  & SSL, matched to S1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Contrastive pretraining uses the PTB-XL training folds without labels and no other data. At the 100\% label budget, C1 and S1 therefore see exactly the same recordings, and their difference isolates the pretraining objective. Below 100\%, the pretrained arms have also seen the unlabelled remainder of the training folds; this is the intended advantage of SSL and is reported as such.
+
+\subsection{Hypotheses}
+
+The following directional hypotheses were fixed before any of the corresponding results existed.
+
+\begin{description}
+  \item[H1 (label efficiency).] C1 achieves a higher macro-averaged AUROC than S1 on the PTB-XL test fold, with the difference largest at the smallest primary budget (5\%) and decreasing as the budget grows.
+  \item[H2a (held-out corruptions).] Under corruptions excluded from every augmentation policy, C1 loses less macro-AUROC relative to its clean score than S1 does.
+  \item[H2b (external dataset).] The drop in macro-AUROC from the PTB-XL test fold to SPH, on the shared labels, is smaller for C1 than for S1.
+  \item[H3 (augmentation policy).] An encoder pretrained with an ECG-specific policy shows smaller degradation under held-out corruptions and on SPH than one pretrained with a generic policy of matched strength.
+\end{description}
+
+Degradation is the absolute difference between the clean and the shifted score, $\mathrm{AUROC}_{\text{clean}} - \mathrm{AUROC}_{\text{shifted}}$, and is always reported together with both absolute scores, so that a model with a low clean score cannot appear robust by default. A finding of C1 $\approx$ S1 would indicate that the SSL advantage reported in earlier ECG work is largely attributable to augmentation; we regard that outcome as equally informative.
+
+%% ======================================================================
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Data}
+\label{sec:data}
+
+\paragraph{PTB-XL} PTB-XL \cite{wagner2020} is a public dataset of clinical 12-lead ECGs of 10~s duration, annotated with 71 statements of the SCP-ECG standard that cover diagnostic, form and rhythm findings. Diagnostic statements carry a likelihood between 0 and 100. We used version 1.0.3 \cite{wagner2022physionet}, obtained from PhysioNet \cite{goldberger2000}, which contains 21,799 recordings from 18,869 patients. Earlier studies, including the main references for our baseline \cite{strodthoff2021,mehari2022}, used the original release of 21,837 recordings; later versions removed recordings with identical waveforms, so published test sets differ slightly from ours. We followed the recommended patient-level split into ten stratified folds \cite{wagner2020}: folds 1--8 for training (17,418 recordings, 15,023 patients), fold 9 for validation (2,183 recordings) and fold 10 for testing (2,198 recordings). All recordings in folds 9 and 10 carry labels validated by a human; in folds 1--8 the share is 64--68\% per fold. Unvalidated labels therefore affect training only, and affect all arms equally.
+
+\paragraph{SPH} The external test set is the Shandong Provincial Hospital database \cite{liu2022sph}: 25,770 12-lead recordings of 10--60~s from 24,666 patients, sampled at 500~Hz and annotated by cardiologists with statements from the AHA/ACC/HRS standard \cite{mason2007}. SPH differs from PTB-XL in country, recording equipment and period of acquisition, and was labelled independently under a different coding scheme. It was never used for training, hyperparameter tuning, threshold selection or model selection.
+
+\paragraph{Deduplication of SPH} Identical recordings have been reported in SPH \cite{leinonen2024}. We hashed each signal array and found 168 groups of byte-identical signals, all of them pairs; no pair spanned two patients. For 143 pairs the primary statements agreed and one copy was removed. For 25 pairs the primary statements differed, and both copies were removed, since neither label can be trusted. This excluded 193 recordings and left 25,577 recordings from 24,642 patients. The 25 conflicting pairs are direct evidence of label noise in the external set and are considered in the limitations.
+
+\subsection{Label harmonisation}
+\label{sec:labels}
+
+The two datasets use different vocabularies. Mapping both to a third vocabulary can lose classes without warning, so we used the mapping supplied by the PTB-XL authors themselves: the dataset's statement table links SCP-ECG statements to codes of the AHA/ACC/HRS statement list \cite{mason2007}, which is the vocabulary SPH uses natively \cite{liu2022sph}. We matched these codes to SPH primary statements and ignored SPH modifier codes. Nine labels could be mapped with confidence (Table~\ref{tab:labels}).
+
+\begin{table}[t]
+\centering
+\caption{The nine shared labels used for cross-hospital evaluation. AF: atrial fibrillation; PR: prolonged PR interval; CRBBB, IRBBB: complete and incomplete right bundle branch block; CLBBB: complete left bundle branch block; LAFB: left anterior fascicular block; LVH: left ventricular hypertrophy; IMI, ASMI: inferior and anteroseptal myocardial infarction. Counts are positive recordings. PTB-XL counts use every listed statement (likelihood threshold 0); SPH counts are after deduplication. Prevalence is given for the two test sets.}
+\label{tab:labels}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llclrrrrr}
+\toprule
+Label & PTB-XL & SPH & Group & \multicolumn{3}{c}{Positive recordings} & \multicolumn{2}{c}{Prevalence (\%)} \\
+      & statement(s) & code & & Train & Fold 10 & SPH & Fold 10 & SPH \\
+\midrule
+AF    & AFIB      & 50  & Criteria     & 1,211 & 152 & 665   & 6.92  & 2.60 \\
+PR    & 1AVB, LPR & 82  & Criteria     & 808   & 96  & 235   & 4.37  & 0.92 \\
+CRBBB & CRBBB     & 106 & Criteria     & 432   & 54  & 700   & 2.46  & 2.74 \\
+IRBBB & IRBBB     & 105 & Criteria     & 894   & 112 & 1,245 & 5.10  & 4.87 \\
+CLBBB & CLBBB     & 104 & Criteria     & 428   & 54  & 82    & 2.46  & 0.32 \\
+LAFB  & LAFB      & 101 & Criteria     & 1,298 & 162 & 151   & 7.37  & 0.59 \\
+LVH   & LVH       & 142 & Interpretive & 1,708 & 214 & 207   & 9.74  & 0.81 \\
+IMI   & IMI       & 161 & Interpretive & 2,143 & 267 & 118   & 12.15 & 0.46 \\
+ASMI  & ASMI      & 165 & Interpretive & 1,887 & 234 & 89    & 10.65 & 0.35 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Several decisions in this mapping are judgements, and we state them as such.
+\begin{itemize}
+  \item \emph{Prolonged PR interval.} SPH has no statement for first-degree atrioventricular block; its code 82 denotes a prolonged PR interval. PTB-XL maps its statement LPR to code 82 and leaves 1AVB without an AHA code. Because first-degree block is defined by PR prolongation, we merged 1AVB and LPR. A merged label is positive if either statement is present, and its predicted score is the maximum of the two output probabilities, on both datasets.
+  \item \emph{ST--T changes were not mapped.} The two datasets divide ST-segment and T-wave findings differently, giving a many-to-many correspondence. T-wave abnormality is reported as exploratory only.
+  \item \emph{Myocardial infarction.} Inferior and anteroseptal infarction have one-to-one code matches. PTB-XL statements for combined locations have no AHA code, and lateral and posterior infarction have no SPH counterpart, so a pooled infarction label is exploratory only.
+  \item \emph{Ectopic beats were excluded.} SPH recordings can be longer than the 10~s we evaluate, so a labelled premature beat may lie outside the evaluated segment. The resulting label noise could be mistaken for distribution shift.
+  \item \emph{Normal ECG is exploratory only.} A ``normal'' SPH recording carries no abnormal statement, whereas the PTB-XL normal statement can co-occur with rhythm statements.
+  \item \emph{Rate-defined rhythms} (sinus bradycardia, tachycardia and arrhythmia) are reported as secondary outcomes, outside the headline metric.
+\end{itemize}
+
+We further divided the nine labels into a \emph{criteria-based} group, defined by measurable intervals or morphology, and an \emph{interpretive} group (hypertrophy and infarction), where labelling practice is more likely to differ between sites. The grouping is an analytic judgement. It matters because AUROC is unaffected by a change in prevalence but not by a change in what a label means, and prevalence differs widely between the two test sets for several labels (Table~\ref{tab:labels}).
+
+\paragraph{Likelihood threshold} In the primary analysis every statement listed for a PTB-XL recording counts as positive. Form and rhythm statements carry likelihood 0 by the dataset's convention, so a global threshold would delete them. As a pre-specified sensitivity analysis we required a likelihood of at least 50 for diagnostic statements only, applied to all PTB-XL splits.
+
+\subsection{Preprocessing}
+\label{sec:preproc}
+
+Cross-dataset evaluation requires that both datasets pass through the same processing, so we did not use the 100~Hz files distributed with PTB-XL, whose downsampling cannot be reproduced on SPH. Both datasets were processed from their 500~Hz signals in millivolts as follows: (1) leads ordered I, II, III, aVR, aVL, aVF, V1--V6; (2) the first 10~s retained; (3) zero-phase band-pass filtering between 0.5 and 40~Hz with a third-order Butterworth filter; (4) anti-aliased polyphase resampling to 100~Hz; (5) per-lead standardisation using the mean and standard deviation of PTB-XL folds 1--8, applied unchanged to all other data. The sampling rate and crop length follow the PTB-XL benchmark \cite{strodthoff2021,mehari2022}. Standardising each recording separately was avoided because it removes absolute amplitude, on which voltage criteria for ventricular hypertrophy depend. The band-pass is narrower than the bandwidth recommended for diagnostic recording \cite{kligfield2007}; we chose it so that PTB-XL and SPH, which had already been filtered by the recording device, are brought to a common band. Evaluating SPH on its full recording length is a secondary sensitivity analysis.
+
+After preprocessing, both datasets were in millivolts with matching amplitude distributions. A small number of recordings had non-physiological amplitudes (maximum absolute value above 20~mV: 7 in PTB-XL and 39 in SPH). The primary analysis keeps every recording, because no exclusion rule had been fixed before the first baseline result was seen; excluding recordings above 20~mV from all evaluation sets is reported as a sensitivity analysis.
+
+Models take 2.5~s windows as input. During training one window was cropped at a random position per recording per step. At evaluation, seven windows with a stride of 1.25~s covered the 10~s recording, and the sigmoid outputs were averaged over windows.
+
+\subsection{Model and supervised training}
+\label{sec:training}
+
+All arms used xresnet1d50, the one-dimensional adaptation of the ResNet family \cite{he2016,he2019bag} used in the PTB-XL benchmark \cite{strodthoff2021} and in prior ECG SSL work \cite{mehari2022}. The encoder has bottleneck stages of depths 3, 4, 6 and 3 with kernel size 5 and 886,400 parameters; the classification head applies concatenated average and maximum pooling followed by one hidden layer of 128 units. We verified that our implementation is identical to the benchmark's reference code: the two produce equal outputs when given the same weights.
+
+Models were trained on the full set of 71 PTB-XL statements with binary cross-entropy, and the shared labels were derived from these outputs at evaluation. Optimisation followed the benchmark: AdamW \cite{loshchilov2019adamw} with weight decay $10^{-2}$, a one-cycle learning-rate schedule \cite{smith2019} with maximum learning rate $10^{-2}$, and batch size 128. The benchmark selects the learning rate with a range test; we fixed it for every arm and budget so that arms differ only in the two design factors. Training lasted 50 epochs or 2,000 steps, whichever was longer, because 50 epochs at the smallest budgets amount to only a few hundred steps. Training used mixed precision \cite{micikevicius2018}; all prediction was done in single precision.
+
+Each run was validated on all of fold 9 at 50 evenly spaced points, and the checkpoint with the best validation macro-AUROC was used for testing. The same validation set was used for every arm and budget. At small budgets it is larger than the training set, which is unrealistic for a label-scarce setting; the choice affects all arms equally and is listed as a limitation. Before any SSL experiment, the pipeline was checked by training S0 on all labels and comparing its test-fold macro-AUROC with the published value for the same architecture \cite{mehari2022} (reported in Section~\todo{Results}).
+
+\subsection{Label budgets}
+\label{sec:budgets}
+
+Label budgets were defined at the level of patients, so that all recordings of a patient enter or leave the labelled set together. For each seed, the training patients were placed in one random order and budget $b$ consisted of the first $\lceil bN \rceil$ patients, which makes the budgets nested. The primary budgets were 5\%, 10\%, 25\%, 50\% and 100\% (752, 1,503, 3,756, 7,512 and 15,023 patients; 860--887, 1,717--1,766, 4,326--4,396, 8,705--8,752 and 17,418 recordings across seeds). At 5\% every shared label had at least 19 positive training recordings in every seed that was checked.
+
+A 1\% budget (151 patients, 165--186 recordings) was run but is exploratory. A feasibility analysis carried out before training showed that at 1\% several shared labels have fewer than ten positive recordings in at least one seed (as few as one for complete left bundle branch block), which cannot support inference. Results at 1\% are reported per seed and are not used to test any hypothesis. The subset, batch order and initialisation of a run all derive from its seed, so the four arms at a given seed and budget were trained on the same labelled recordings.
+
+\subsection{Contrastive pretraining}
+\label{sec:ssl}
+
+Pretraining followed SimCLR \cite{chen2020simclr}, the contrastive method used in the ECG studies we compare with \cite{mehari2022,soltanieh2024ood,zeng2026}. For each recording in a batch, two 2.5~s windows were cropped independently at random positions from the 10~s recording, and the augmentation policy was applied independently to each. The encoder was the xresnet1d50 encoder of the classification model; a projection head (concatenated pooling, a linear layer of 512 units with batch normalisation and ReLU, and a linear layer of 128 units) was attached for pretraining and discarded afterwards. For a batch of $N$ recordings with $\ell_2$-normalised projections $z_1,\dots,z_{2N}$, the loss for a positive pair $(i,j)$ is the normalised temperature-scaled cross-entropy
+\begin{equation}
+\ell_{i,j} = -\log \frac{\exp(z_i^{\top} z_j/\tau)}{\sum_{k=1,\,k\neq i}^{2N} \exp(z_i^{\top} z_k/\tau)},
+\end{equation}
+averaged over both orderings of all positive pairs.
+
+We used $N = 512$ (1,022 negatives per anchor), temperature $\tau = 0.1$, AdamW with learning rate $10^{-3}$ and weight decay $10^{-4}$, a linear warm-up over 10 epochs followed by cosine decay \cite{loshchilov2017sgdr}, and 300 epochs (10,200 steps) on the 17,418 training recordings without labels. Folds 9 and 10 and SPH were never seen in pretraining. One encoder was pretrained per seed, and fine-tuning at seed $k$ started from the encoder of pretraining seed $k$.
+
+Three choices keep the comparison between arms clean, at some cost to the pretrained arms.
+\begin{itemize}
+  \item \emph{No SSL hyperparameter was tuned and no labels were used to choose a pretraining checkpoint}; the encoder after the final epoch was transferred. Tuning with validation labels would give the pretrained arms a selection step that the supervised arms do not have.
+  \item \emph{Pretrained arms were fine-tuned with exactly the supervised recipe} of Section~\ref{sec:training}: the whole network was trained, with no frozen-encoder phase, no reduced encoder learning rate and no linear probing. Any SSL-specific fine-tuning recipe would add a second difference between C1 and S1. The risk, recorded before any SSL result, is that a peak learning rate of $10^{-2}$ overwrites pretrained features and biases the contrast towards zero. As an exploratory check we therefore also fine-tuned C1 with a maximum learning rate of $10^{-3}$ at the 5\% and 100\% budgets; it is reported whatever its outcome and does not replace the primary results.
+  \item \emph{The batch size was fixed by the hardware.} Contrastive learning benefits from larger batches and longer training than supervised learning \cite{chen2020simclr}, so our setting may understate what SSL can achieve with more compute.
+\end{itemize}
+
+\subsection{Augmentation policies and corruption suite}
+\label{sec:augment}
+
+Table~\ref{tab:aug} lists the transformations. The policy $P$ of the core design is the ECG-specific policy $P_{\text{ecg}}$, chosen before any result. It contains three physiologically motivated transformations acting on standardised signals: baseline wander (the mean of three sinusoids of 0.05--0.5~Hz with random phase, scaled by an amplitude of up to 0.5 drawn per lead); muscle-artefact bursts (Gaussian noise confined to one to three bursts of 0.2--1.0~s per lead, with standard deviation up to 0.3); and per-lead amplitude scaling by a factor drawn uniformly from 0.7--1.3, modelling variation in electrode contact. The generic policy $P_{\text{gen}}$, used only for H3, contains stationary Gaussian noise on all leads (standard deviation up to 0.3), global amplitude scaling (0.7--1.3), masking of one segment of up to 25\% of the window, and smooth time warping with local speed changes of up to $\pm10\%$. Each transformation was applied independently with probability 0.5 per sample. The same implementation, with the same parameters, was used for pretraining and for supervised training in arms S1 and C1.
+
+\begin{table}[t]
+\centering
+\caption{Transformations used as training augmentations and as test-time corruptions. Held-out corruptions appear in neither policy.}
+\label{tab:aug}
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+Transformation & $P_{\text{ecg}}$ & $P_{\text{gen}}$ & Held-out \\
+\midrule
+Baseline wander (low-frequency sinusoids)   & \checkmark & & \\
+Muscle-artefact noise in short bursts       & \checkmark & & \\
+Per-lead amplitude scaling                  & \checkmark & & \\
+Stationary Gaussian noise, all leads        & & \checkmark & \\
+Global amplitude scaling                    & & \checkmark & \\
+Random time masking                         & & \checkmark & \\
+Time warping                                & & \checkmark & \\
+Random 2.5~s crop, no resizing              & \checkmark & \checkmark & \\
+Lead dropout (1--3 leads set to zero) & & & \checkmark \\
+Limb-lead reversal (left arm / right arm)   & & & \checkmark \\
+Baseline step shift (electrode motion)      & & & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two design decisions were made before any augmented model was trained. Powerline interference was left out of $P_{\text{ecg}}$: at a sampling rate of 100~Hz a 50~Hz component lies at the Nyquist frequency and a 60~Hz component aliases to 40~Hz, and both are removed by the band-pass filter, so the augmentation could not be interpreted as physiologically motivated. Random \emph{resized} cropping was replaced by plain cropping, because resizing stretches the time axis and changes the apparent heart rate; in the augmentation-matched supervised arm it would present, for example, a tachycardia recording at a normal-looking rate under its original label. Muscle noise was defined as bursts so that it differs from the stationary Gaussian noise of the generic policy.
+
+\paragraph{Held-out corruptions (H2a)} Robustness was tested on three corruptions that occur in clinical recording \cite{moody1984,batchvarov2007} and appear in neither policy. Each was applied at three severities to the preprocessed 10~s recordings of PTB-XL fold 10, before normalisation, with labels unchanged. (i) \emph{Lead dropout}: one, two or three randomly chosen leads were set to zero for the whole recording. (ii) \emph{Limb-lead reversal}: the left-arm and right-arm electrodes were exchanged, which inverts lead I, exchanges leads II and III and leads aVR and aVL, and leaves aVF and the precordial leads unchanged. A reversal has no magnitude, so severity was the share of recordings affected (25\%, 50\% or 100\%, as nested sets). (iii) \emph{Baseline step}: an abrupt offset of 0.5, 1.0 or 2.0~mV, with random sign, at one randomly chosen electrode and at a time drawn uniformly between 1 and 9~s. The offset was propagated to the leads through the standard lead definitions, so that a step at a limb electrode changes several leads at once, and was passed through the preprocessing filter, which turns it into a transient lasting about one second with a peak of roughly half the step size, as a real recording chain would. The random choices depend only on a fixed seed, the corruption, the severity and the recording, so every model was evaluated on exactly the same corrupted test set. All parameters were frozen before any model was evaluated on a corruption. Corruptions from the transformations in $P$ are reported separately as ``seen'' corruptions and are not used to test H2a.
+
+\paragraph{Policy comparison (H3)} The comparison of $P_{\text{ecg}}$ and $P_{\text{gen}}$ uses three strength levels per policy, obtained by multiplying every magnitude above by 0.5, 1.0 or 1.5; the core design uses $P_{\text{ecg}}$ at 1.0. Because contrastive ECG pretraining is sensitive to augmentation strength \cite{soltanieh2022aug}, the policies are matched in strength (noise-based transformations on signal-to-noise ratio, masking and warping on the fraction of samples altered), and the full $3\times2$ grid is reported so that the comparison cannot be explained by one policy having been tuned harder. H3 is evaluated for the C1 configuration at the 100\% budget. \todo{Confirm the strength-matching and level-selection procedure as implemented when the H3 grid is run.}
+
+\subsection{Evaluation metrics}
+\label{sec:metrics}
+
+The headline metric is the macro-averaged area under the receiver operating characteristic curve (AUROC). On the PTB-XL test fold it is averaged over all statements with at least one positive and one negative recording, following the benchmark convention \cite{strodthoff2021}; in fold 10 this is all 71 statements. For the cross-hospital comparison it is averaged over the nine shared labels, computed with identical label definitions on fold 10 and on SPH, and reported overall and for the criteria-based and interpretive groups. AUROC equals 0.5 for any constant predictor, which protects against degenerate solutions at small budgets; a statement with no positive training recording at a small budget still counts in the average.
+
+Out-of-distribution degradation on the external dataset is the fold-10 macro-AUROC minus the SPH macro-AUROC on the same labels, and degradation under corruption is the clean minus the corrupted fold-10 macro-AUROC. Because a macro-averaged degradation can be the net of opposite per-label effects, per-label values are reported alongside every macro value. We also report the area under the precision--recall curve next to each label's prevalence, the F1 score at thresholds selected on fold 9, and precision recomputed at PTB-XL prevalence, $\mathrm{PPV}(\pi) = \mathrm{TPR}\,\pi / (\mathrm{TPR}\,\pi + \mathrm{FPR}\,(1-\pi))$; threshold-dependent metrics are shown with a constant-predictor reference.
+
+\subsection{Statistical analysis}
+\label{sec:stats}
+
+Each cell of the core design (4 arms $\times$ 5 primary budgets, plus the exploratory 1\% budget) was run with five seeds, giving 120 fine-tuning runs and five pretraining runs. Single-seed comparisons are unreliable in this setting \cite{bouthillier2021,ahmed2026}; if compute had been short, the pre-specified rule was to drop intermediate budgets before reducing the number of seeds.
+
+Four contrasts were designated as primary before the results existed and are tested as one family with Holm's step-down correction \cite{holm1979}: (1) C1 $-$ S1 in test-fold macro-AUROC at the 5\% budget (H1); (2) C1 $-$ S1 in degradation at 100\%, averaged with equal weight over the nine held-out corruption conditions (H2a); (3) C1 $-$ S1 in degradation from fold 10 to SPH at 100\% (H2b); and (4) $P_{\text{ecg}} - P_{\text{gen}}$ in degradation under held-out corruptions and on SPH at 100\% (H3). All other comparisons are secondary and are reported without claims of statistical significance.
+
+Uncertainty from the finite test sets is estimated with a paired bootstrap \cite{efron1993} that resamples \emph{patients}, not recordings, and evaluates both arms of a contrast on the same resample. Variation between training seeds is reported separately from bootstrap intervals, and results are given as effect sizes with 95\% intervals. Fold 10 and SPH are resampled independently, with 10,000 resamples each. A patient drawn $k$ times contributes all of his or her recordings with weight $k$, and each resample is applied to both arms and to all five seeds. The test statistic is the mean over seeds of the seed-paired difference; macro-AUROC in a resample is averaged over the labels for which both classes are present. We report percentile 95\% intervals and two-sided $p$-values, $2\min\{\Pr(d^{*}\leq 0), \Pr(d^{*}\geq 0)\}$. These intervals describe test-set sampling error for the trained models; as a secondary analysis we also report intervals in which the seeds are resampled together with the patients. The number of resamples and the handling of seeds were fixed after the seed-level results of the core design had been seen, but before the bootstrap was run. Runs whose best validation score occurs at the first evaluation point are flagged as a descriptive check on training collapse.
+
+\subsection{Implementation and reproducibility}
+\label{sec:repro}
+
+Experiments were implemented in PyTorch and run on NVIDIA T4 GPUs (16~GB) on a public notebook platform; one pretraining run took about 21 minutes. Each run stores its configuration, including software versions and hardware, its training log, and its predictions on fold 10 and SPH. Every fine-tuning run of a pretrained arm records the SHA-256 hash of the encoder file it loaded, so each result can be traced to one pretraining run, and a manifest of hashes identifies the preprocessed data used. A subset of runs was repeated on a second platform as a cross-platform check (Section~\todo{Results}).
+
+The research question, hypotheses, primary contrasts and the preprocessing, training, pretraining and cross-hospital protocols were written and frozen in a public, version-controlled repository before the corresponding experiments were run. Changes made before any result existed are recorded with their reasons, as are decisions that had to be made after a result had been seen, which are handled as sensitivity analyses. A number enters this paper only if the files of the run that produced it are in the repository. Code, protocols, the decision log and all run outputs are available at \url{https://github.com/Salako07/robust-ecg-ssl}. PTB-XL and SPH are publicly available from their original sources \cite{wagner2022physionet,liu2022sph}.
+
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+
+\end{document}

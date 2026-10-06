@@ -1,0 +1,25 @@
+{
+ "n_boot": 10000,
+ "rng_seed": 20261006,
+ "budgets": [
+  0.01,
+  0.05,
+  0.1,
+  0.25,
+  0.5,
+  1.0
+ ],
+ "n_test_records": 2198,
+ "n_test_patients": 1904,
+ "n_sph_records": 25577,
+ "n_sph_patients": 24642,
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "registry_reproduction_max_abs_diff": 0.00023373343720389794,
+ "family_size": 4
+}
