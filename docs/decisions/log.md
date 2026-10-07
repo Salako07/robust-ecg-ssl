@@ -322,3 +322,46 @@ supersede them with a new one.
 - **Decision:** the D30 check (C1 at lr 1e-3; 5% and 100%; seeds 0–2) is now required before H1 is written up,
   because the H1 pattern is null. It remains exploratory and is reported whatever it shows.
 - **Protocol unchanged:** no setting of the SSL or fine-tuning protocol is altered in response to these results.
+
+### D34 — 2026-10-06 · Bootstrap specification fixed; H1 and H2b analysed (inference still incomplete)
+- **Decision:** `scripts/bootstrap_contrasts.py` implements the inference of RQ v2 §6 and the E3 protocol as follows.
+  Resampling unit: patient (all recordings of a drawn patient, with multiplicity). Fold 10 and SPH are resampled
+  independently. One resample is applied to both arms and to all five seeds. Statistic: mean over seeds of the
+  seed-paired difference. 10,000 resamples, RNG seed 20261006. Percentile 95% interval; two-sided p-value
+  2·min(P(d* ≤ 0), P(d* ≥ 0)) with the +1 correction. Macro-AUROC in a resample averages over the labels that have
+  both classes in that resample. A second interval that also resamples seeds is reported as secondary.
+- **Reason:** RQ v2 §6 fixed the unit (patients), the pairing and the Holm family, but left the number of resamples,
+  the handling of seeds and the two-test-set case open (E3 protocol, open item 3).
+- **Timing (stated as a limitation):** these choices were made after the seed-level tables of D33 had been seen.
+  They were fixed in the script before it was run on real predictions and were not changed afterwards. One
+  implementation change was made after a first complete run: the tolerance of the registry-reproduction check was
+  raised from 2e-4 to 1e-3, because float16 storage gives a 2.3e-4 difference at the 1% budget. That first run
+  stopped at the check before writing any file, so no result from it was seen; the reported run uses the same RNG
+  seed.
+- **Evidence:** `docs/results_bootstrap_v1.md`; `results/analysis/bootstrap_*.csv`, `bootstrap_config.json`;
+  `tests/test_bootstrap.py` (weighted AUROC equal to scikit-learn's to 1e-12, whole-patient resampling, Holm).
+- **Result:** H2b (C1 − S1 degradation, 100%): −0.0019, 95% interval −0.0028 to −0.0010, p = 0.0002; significant
+  for any values of the two missing p-values (p × 4 = 0.0008); driven mainly by IRBBB. H1 (C1 − S1, 5%, 71
+  statements): +0.0103, interval +0.0011 to +0.0157, p = 0.024; Holm-adjusted p will lie between 0.024 and 0.073
+  depending on H2a and H3; sign changes across seeds and the seeds-plus-patients interval includes zero; no
+  decreasing trend across budgets (C1 − S1 is −0.0048 at 25%, interval excluding zero).
+- **Impact:** no hypothesis is declared supported or rejected until all four primary p-values exist. The D30
+  learning-rate check remains required before H1 is written up.
+
+### D35 — 2026-10-06 · Corruption protocol v1 and H2a statistic frozen
+- **Decision:** `docs/corruption_protocol_v1.md` is frozen as proposed, with no amendment. Held-out suite on PTB-XL
+  fold 10: lead dropout (1/2/3 leads), LA↔RA reversal (25/50/100% of records, nested), baseline step at one
+  electrode passed through the preprocessing filter (0.5/1.0/2.0 mV). Seen suite: P_ecg transforms at
+  low/mid/high. H2a statistic: C1 − S1 in mean degradation over the nine held-out conditions, 71 statements,
+  100% budget; inference as in D34 (`scripts/bootstrap_h2a.py`).
+- **Reason:** RQ v2 §5 fixed the three corruption types and "three severities" but not their parameters, and
+  RQ v2 §6 did not say how conditions are combined into the one primary contrast.
+- **Judgements recorded:** reversal severity is the share of records affected (it has no magnitude); the step is
+  modelled at the electrode and filtered, not as a constant offset on single leads; the nine conditions are
+  averaged with equal weight.
+- **Safeguard:** `corrupt.FROZEN` was `False` until this entry, and `scripts/eval_corruptions.py` exits while it
+  is. No real checkpoint had been evaluated on any corruption. Code tested on synthetic data only (unit tests;
+  end-to-end smoke runs with randomly trained models).
+- **Timing (limitation):** frozen after the clean and SPH results of the core grid were known (D33, D34), before
+  any corrupted result.
+- **Impact:** RQ v2 §5 "parameters are fixed in code before the first evaluation run" is satisfied by this entry.
