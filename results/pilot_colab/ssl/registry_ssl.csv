@@ -1,0 +1,2 @@
+run_id,policy,strength,seed,epochs,bs,tau,final_loss,final_top1,minutes_last_session,encoder_sha256
+SSL_ecg-mid_s0,ecg,mid,0,300,512,0.1,0.09444579986088417,1.0,23.576749547322592,0cc027b0c1e31fe3045ccb78c9e544b704b7e21e520de3a84d307fcf029a94b7

@@ -1,0 +1,30 @@
+{
+ "norm_ptbxl_folds1-8.json": {
+  "bytes": 629,
+  "sha256": "5452c982a4c43e1f5762d5d81c52b8da4d8708f1514a82ae51080028e38cf4ae"
+ },
+ "ptbxl_X.npy": {
+  "bytes": 1046352128,
+  "sha256": "1b7058837b16b7ab2bde6732c56bff89b14fbd41560a422bf96bb415dc3ffd62"
+ },
+ "ptbxl_meta.csv": {
+  "bytes": 6594879,
+  "sha256": "7600de9c1b27d181d850b3c6038a35d7c3ddb6bb33b702e3a20252a6859d216b"
+ },
+ "ptbxl_statements.json": {
+  "bytes": 589,
+  "sha256": "e48a9a5cb4f9eddc24769d9ca0af0c6155eb165cde64bdf69e72734e38e11204"
+ },
+ "scp_statements.csv": {
+  "bytes": 9720,
+  "sha256": "ad05b0b1fcae83bb1230755ad9cfc7c96f303feddc08a4a9ad5bdc9ca63bac8f"
+ },
+ "sph_X.npy": {
+  "bytes": 1227696128,
+  "sha256": "bab1daa28fa162d96aaf3d5966a9a39f4a89c2a17a5934b2cf7581ba087a92b7"
+ },
+ "sph_meta.csv": {
+  "bytes": 991543,
+  "sha256": "10a7493a83bdc4c81b9a851c1573e192539e935dee08ee334de858707ce2e710"
+ }
+}

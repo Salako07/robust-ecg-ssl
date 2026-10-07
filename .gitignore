@@ -1,3 +1,26 @@
+# data and large artifacts (never commit datasets)
 data/
+*.h5
+*.npy
+*.npz
+checkpoints/
+/runs/
+*.pt
+wandb/
+
+# environments and caches
 .venv/
+venv/
 __pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# committed results are allowed (small per-run files, including predictions)
+!results/runs/
+!results/runs/**

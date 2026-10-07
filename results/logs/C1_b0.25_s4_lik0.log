@@ -1,0 +1,55 @@
+C1_b0.25_s4_lik0: train=4396 records, 2000 steps, eval every 40, device=cuda
+/tmp/robust-ecg-ssl/scripts/train.py:143: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"step {step}/{total}  loss {float(loss):.4f}  val macro-AUROC {auc:.4f} "
+step 40/2000  loss 0.9085  val macro-AUROC 0.5812 (best 0.5812, 71 labels)  0.1 min
+step 80/2000  loss 0.7702  val macro-AUROC 0.6120 (best 0.6120, 71 labels)  0.1 min
+step 120/2000  loss 0.6343  val macro-AUROC 0.6122 (best 0.6122, 71 labels)  0.2 min
+step 160/2000  loss 0.3410  val macro-AUROC 0.6342 (best 0.6342, 71 labels)  0.2 min
+step 200/2000  loss 0.1050  val macro-AUROC 0.7327 (best 0.7327, 71 labels)  0.3 min
+step 240/2000  loss 0.0917  val macro-AUROC 0.7725 (best 0.7725, 71 labels)  0.3 min
+step 280/2000  loss 0.0958  val macro-AUROC 0.7856 (best 0.7856, 71 labels)  0.3 min
+step 320/2000  loss 0.1020  val macro-AUROC 0.7751 (best 0.7856, 71 labels)  0.4 min
+step 360/2000  loss 0.0977  val macro-AUROC 0.7995 (best 0.7995, 71 labels)  0.4 min
+step 400/2000  loss 0.0889  val macro-AUROC 0.8119 (best 0.8119, 71 labels)  0.5 min
+step 440/2000  loss 0.0833  val macro-AUROC 0.8209 (best 0.8209, 71 labels)  0.5 min
+step 480/2000  loss 0.0742  val macro-AUROC 0.8206 (best 0.8209, 71 labels)  0.6 min
+step 520/2000  loss 0.0748  val macro-AUROC 0.8359 (best 0.8359, 71 labels)  0.6 min
+step 560/2000  loss 0.0715  val macro-AUROC 0.8506 (best 0.8506, 71 labels)  0.7 min
+step 600/2000  loss 0.0748  val macro-AUROC 0.8394 (best 0.8506, 71 labels)  0.7 min
+step 640/2000  loss 0.0745  val macro-AUROC 0.8584 (best 0.8584, 71 labels)  0.8 min
+step 680/2000  loss 0.0880  val macro-AUROC 0.8558 (best 0.8584, 71 labels)  0.8 min
+step 720/2000  loss 0.0625  val macro-AUROC 0.8642 (best 0.8642, 71 labels)  0.9 min
+step 760/2000  loss 0.0652  val macro-AUROC 0.8707 (best 0.8707, 71 labels)  0.9 min
+step 800/2000  loss 0.0633  val macro-AUROC 0.8740 (best 0.8740, 71 labels)  1.0 min
+step 840/2000  loss 0.0702  val macro-AUROC 0.8745 (best 0.8745, 71 labels)  1.0 min
+step 880/2000  loss 0.0669  val macro-AUROC 0.8777 (best 0.8777, 71 labels)  1.1 min
+step 920/2000  loss 0.0720  val macro-AUROC 0.8759 (best 0.8777, 71 labels)  1.1 min
+step 960/2000  loss 0.0648  val macro-AUROC 0.8711 (best 0.8777, 71 labels)  1.1 min
+step 1000/2000  loss 0.0702  val macro-AUROC 0.8846 (best 0.8846, 71 labels)  1.2 min
+step 1040/2000  loss 0.0738  val macro-AUROC 0.8879 (best 0.8879, 71 labels)  1.2 min
+step 1080/2000  loss 0.0733  val macro-AUROC 0.8783 (best 0.8879, 71 labels)  1.3 min
+step 1120/2000  loss 0.0653  val macro-AUROC 0.8845 (best 0.8879, 71 labels)  1.3 min
+step 1160/2000  loss 0.0628  val macro-AUROC 0.8845 (best 0.8879, 71 labels)  1.4 min
+step 1200/2000  loss 0.0538  val macro-AUROC 0.8799 (best 0.8879, 71 labels)  1.4 min
+step 1240/2000  loss 0.0554  val macro-AUROC 0.8843 (best 0.8879, 71 labels)  1.5 min
+step 1280/2000  loss 0.0559  val macro-AUROC 0.8842 (best 0.8879, 71 labels)  1.5 min
+step 1320/2000  loss 0.0599  val macro-AUROC 0.8789 (best 0.8879, 71 labels)  1.6 min
+step 1360/2000  loss 0.0618  val macro-AUROC 0.8912 (best 0.8912, 71 labels)  1.6 min
+step 1400/2000  loss 0.0576  val macro-AUROC 0.8840 (best 0.8912, 71 labels)  1.7 min
+step 1440/2000  loss 0.0637  val macro-AUROC 0.8875 (best 0.8912, 71 labels)  1.7 min
+step 1480/2000  loss 0.0563  val macro-AUROC 0.8855 (best 0.8912, 71 labels)  1.7 min
+step 1520/2000  loss 0.0511  val macro-AUROC 0.8861 (best 0.8912, 71 labels)  1.8 min
+step 1560/2000  loss 0.0557  val macro-AUROC 0.8841 (best 0.8912, 71 labels)  1.8 min
+step 1600/2000  loss 0.0600  val macro-AUROC 0.8871 (best 0.8912, 71 labels)  1.9 min
+step 1640/2000  loss 0.0541  val macro-AUROC 0.8864 (best 0.8912, 71 labels)  1.9 min
+step 1680/2000  loss 0.0468  val macro-AUROC 0.8829 (best 0.8912, 71 labels)  2.0 min
+step 1720/2000  loss 0.0519  val macro-AUROC 0.8841 (best 0.8912, 71 labels)  2.0 min
+step 1760/2000  loss 0.0482  val macro-AUROC 0.8808 (best 0.8912, 71 labels)  2.1 min
+step 1800/2000  loss 0.0472  val macro-AUROC 0.8814 (best 0.8912, 71 labels)  2.1 min
+step 1840/2000  loss 0.0465  val macro-AUROC 0.8828 (best 0.8912, 71 labels)  2.2 min
+step 1880/2000  loss 0.0484  val macro-AUROC 0.8809 (best 0.8912, 71 labels)  2.2 min
+step 1920/2000  loss 0.0503  val macro-AUROC 0.8820 (best 0.8912, 71 labels)  2.2 min
+step 1960/2000  loss 0.0517  val macro-AUROC 0.8822 (best 0.8912, 71 labels)  2.3 min
+step 2000/2000  loss 0.0461  val macro-AUROC 0.8812 (best 0.8912, 71 labels)  2.3 min
+{"run_id": "C1_b0.25_s4_lik0", "test_macro_auroc": 0.8828929497953852, "test_e3_macro_auroc": 0.9624599194034827, "sph_e3_macro_auroc": 0.9641000813689742}

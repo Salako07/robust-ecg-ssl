@@ -1,0 +1,97 @@
+contrast,meaning,budget,metric,n_seeds,mean_diff,ci95_lo,ci95_hi,seeds_positive,per_seed
+C1-S1,"SSL effect, augmentation matched (primary)",0.01,test_macro_auroc,5,-0.00847,-0.02886,0.01192,2,+0.0046 -0.0181 -0.0323 +0.0062 -0.0028
+C1-S1,"SSL effect, augmentation matched (primary)",0.01,test_e3_macro_auroc,5,0.02476,0.0031,0.04642,4,+0.0377 +0.0277 +0.0260 +0.0373 -0.0049
+C1-S1,"SSL effect, augmentation matched (primary)",0.01,sph_e3_macro_auroc,5,0.01576,-0.01829,0.04982,4,+0.0134 +0.0304 +0.0225 +0.0420 -0.0296
+C1-S1,"SSL effect, augmentation matched (primary)",0.01,e3_degradation,5,0.009,-0.00893,0.02694,3,+0.0243 -0.0028 +0.0035 -0.0047 +0.0246
+C1-S1,"SSL effect, augmentation matched (primary)",0.05,test_macro_auroc,5,0.01027,-0.01343,0.03397,3,+0.0228 -0.0117 +0.0260 -0.0095 +0.0237
+C1-S1,"SSL effect, augmentation matched (primary)",0.05,test_e3_macro_auroc,5,0.00536,-0.00104,0.01176,4,+0.0097 +0.0018 -0.0019 +0.0088 +0.0084
+C1-S1,"SSL effect, augmentation matched (primary)",0.05,sph_e3_macro_auroc,5,0.00449,-0.00397,0.01294,4,+0.0132 +0.0024 -0.0044 +0.0090 +0.0021
+C1-S1,"SSL effect, augmentation matched (primary)",0.05,e3_degradation,5,0.00087,-0.00375,0.0055,2,-0.0035 -0.0006 +0.0024 -0.0003 +0.0064
+C1-S1,"SSL effect, augmentation matched (primary)",0.1,test_macro_auroc,5,-0.0005,-0.01691,0.0159,2,+0.0071 +0.0158 -0.0190 -0.0061 -0.0002
+C1-S1,"SSL effect, augmentation matched (primary)",0.1,test_e3_macro_auroc,5,-7e-05,-0.00558,0.00543,2,-0.0054 +0.0027 +0.0060 -0.0021 -0.0016
+C1-S1,"SSL effect, augmentation matched (primary)",0.1,sph_e3_macro_auroc,5,0.00119,-0.00246,0.00485,3,+0.0009 +0.0043 +0.0040 -0.0009 -0.0023
+C1-S1,"SSL effect, augmentation matched (primary)",0.1,e3_degradation,5,-0.00127,-0.00516,0.00263,2,-0.0063 -0.0016 +0.0020 -0.0011 +0.0007
+C1-S1,"SSL effect, augmentation matched (primary)",0.25,test_macro_auroc,5,-0.00476,-0.00828,-0.00124,0,-0.0027 -0.0033 -0.0097 -0.0046 -0.0035
+C1-S1,"SSL effect, augmentation matched (primary)",0.25,test_e3_macro_auroc,5,-0.001,-0.0047,0.00269,1,+0.0034 -0.0002 -0.0029 -0.0010 -0.0044
+C1-S1,"SSL effect, augmentation matched (primary)",0.25,sph_e3_macro_auroc,5,-0.00208,-0.00476,0.00061,1,-0.0048 -0.0008 +0.0004 -0.0014 -0.0038
+C1-S1,"SSL effect, augmentation matched (primary)",0.25,e3_degradation,5,0.00107,-0.00424,0.00639,3,+0.0082 +0.0006 -0.0033 +0.0004 -0.0005
+C1-S1,"SSL effect, augmentation matched (primary)",0.5,test_macro_auroc,5,0.00105,-0.0045,0.0066,4,+0.0019 -0.0068 +0.0036 +0.0041 +0.0025
+C1-S1,"SSL effect, augmentation matched (primary)",0.5,test_e3_macro_auroc,5,-0.0012,-0.00281,0.0004,1,+0.0001 -0.0032 -0.0011 -0.0003 -0.0016
+C1-S1,"SSL effect, augmentation matched (primary)",0.5,sph_e3_macro_auroc,5,-0.00099,-0.00312,0.00114,2,+0.0008 -0.0036 -0.0009 +0.0002 -0.0015
+C1-S1,"SSL effect, augmentation matched (primary)",0.5,e3_degradation,5,-0.00021,-0.00074,0.00032,1,-0.0007 +0.0004 -0.0001 -0.0006 -0.0001
+C1-S1,"SSL effect, augmentation matched (primary)",1.0,test_macro_auroc,5,-0.00231,-0.00639,0.00176,0,-0.0082 -0.0009 -0.0004 -0.0013 -0.0009
+C1-S1,"SSL effect, augmentation matched (primary)",1.0,test_e3_macro_auroc,5,-0.00031,-0.00138,0.00076,3,-0.0016 +0.0000 +0.0002 +0.0006 -0.0008
+C1-S1,"SSL effect, augmentation matched (primary)",1.0,sph_e3_macro_auroc,5,0.00158,0.00023,0.00292,5,+0.0002 +0.0018 +0.0032 +0.0014 +0.0012
+C1-S1,"SSL effect, augmentation matched (primary)",1.0,e3_degradation,5,-0.00189,-0.00285,-0.00092,0,-0.0018 -0.0018 -0.0030 -0.0008 -0.0020
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.01,test_macro_auroc,5,0.01676,0.00016,0.03336,5,+0.0301 +0.0057 +0.0017 +0.0304 +0.0159
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.01,test_e3_macro_auroc,5,0.05102,0.03007,0.07198,5,+0.0602 +0.0543 +0.0471 +0.0690 +0.0245
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.01,sph_e3_macro_auroc,5,0.03894,0.00543,0.07245,5,+0.0599 +0.0217 +0.0462 +0.0655 +0.0013
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.01,e3_degradation,5,0.01209,-0.00633,0.0305,5,+0.0003 +0.0326 +0.0009 +0.0035 +0.0231
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.05,test_macro_auroc,5,-0.00097,-0.01898,0.01704,2,-0.0171 -0.0074 +0.0172 -0.0088 +0.0112
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.05,test_e3_macro_auroc,5,0.00593,0.00416,0.0077,5,+0.0051 +0.0075 +0.0048 +0.0048 +0.0075
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.05,sph_e3_macro_auroc,5,0.00708,0.00045,0.01371,4,+0.0094 +0.0118 +0.0097 +0.0064 -0.0018
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.05,e3_degradation,5,-0.00115,-0.0086,0.00629,1,-0.0043 -0.0043 -0.0049 -0.0016 +0.0093
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.1,test_macro_auroc,5,-0.00585,-0.01717,0.00547,2,-0.0127 +0.0008 +0.0018 -0.0184 -0.0008
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.1,test_e3_macro_auroc,5,0.00583,-0.00067,0.01232,4,+0.0014 +0.0096 +0.0108 -0.0009 +0.0082
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.1,sph_e3_macro_auroc,5,0.00336,-0.00262,0.00934,4,-0.0048 +0.0078 +0.0043 +0.0038 +0.0057
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.1,e3_degradation,5,0.00246,-0.00316,0.00809,4,+0.0062 +0.0018 +0.0066 -0.0047 +0.0025
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.25,test_macro_auroc,5,-0.00279,-0.01086,0.00528,1,-0.0088 -0.0018 +0.0079 -0.0057 -0.0056
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.25,test_e3_macro_auroc,5,-0.00227,-0.00695,0.00241,2,+0.0006 -0.0071 +0.0023 -0.0045 -0.0026
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.25,sph_e3_macro_auroc,5,0.00155,0.00028,0.00283,4,-0.0002 +0.0022 +0.0018 +0.0016 +0.0023
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.25,e3_degradation,5,-0.00382,-0.00922,0.00157,2,+0.0008 -0.0093 +0.0004 -0.0061 -0.0050
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.5,test_macro_auroc,5,6e-05,-0.00813,0.00825,2,+0.0090 -0.0026 -0.0014 +0.0036 -0.0084
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.5,test_e3_macro_auroc,5,-0.00076,-0.00335,0.00183,2,-0.0021 +0.0007 -0.0001 -0.0037 +0.0014
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.5,sph_e3_macro_auroc,5,0.00044,-0.00367,0.00456,4,+0.0019 -0.0053 +0.0005 +0.0028 +0.0024
+C0-S0,"SSL effect, no augmentation (as usually reported)",0.5,e3_degradation,5,-0.00121,-0.00699,0.00457,1,-0.0039 +0.0060 -0.0006 -0.0065 -0.0010
+C0-S0,"SSL effect, no augmentation (as usually reported)",1.0,test_macro_auroc,5,-0.00072,-0.0049,0.00346,1,-0.0016 -0.0015 -0.0004 +0.0046 -0.0047
+C0-S0,"SSL effect, no augmentation (as usually reported)",1.0,test_e3_macro_auroc,5,-0.0001,-0.00123,0.00102,2,+0.0006 -0.0002 -0.0001 +0.0007 -0.0015
+C0-S0,"SSL effect, no augmentation (as usually reported)",1.0,sph_e3_macro_auroc,5,-0.00162,-0.00478,0.00155,1,-0.0020 -0.0001 +0.0002 -0.0059 -0.0003
+C0-S0,"SSL effect, no augmentation (as usually reported)",1.0,e3_degradation,5,0.00151,-0.00248,0.0055,2,+0.0026 -0.0001 -0.0003 +0.0066 -0.0013
+S1-S0,"augmentation effect, random init",0.01,test_macro_auroc,5,0.00851,-0.00832,0.02534,4,-0.0092 +0.0065 +0.0232 +0.0014 +0.0208
+S1-S0,"augmentation effect, random init",0.01,test_e3_macro_auroc,5,0.02423,0.00909,0.03936,5,+0.0056 +0.0255 +0.0222 +0.0390 +0.0289
+S1-S0,"augmentation effect, random init",0.01,sph_e3_macro_auroc,5,0.01518,-3e-05,0.0304,5,+0.0016 +0.0065 +0.0118 +0.0285 +0.0275
+S1-S0,"augmentation effect, random init",0.01,e3_degradation,5,0.00904,0.00054,0.01755,5,+0.0039 +0.0190 +0.0104 +0.0105 +0.0014
+S1-S0,"augmentation effect, random init",0.05,test_macro_auroc,5,-0.00956,-0.02052,0.00141,1,-0.0239 -0.0077 +0.0005 -0.0082 -0.0085
+S1-S0,"augmentation effect, random init",0.05,test_e3_macro_auroc,5,0.00132,-0.00236,0.005,3,-0.0007 +0.0029 +0.0018 +0.0051 -0.0025
+S1-S0,"augmentation effect, random init",0.05,sph_e3_macro_auroc,5,0.00652,0.00273,0.01031,5,+0.0028 +0.0069 +0.0081 +0.0105 +0.0043
+S1-S0,"augmentation effect, random init",0.05,e3_degradation,5,-0.00519,-0.00698,-0.00341,0,-0.0034 -0.0040 -0.0063 -0.0054 -0.0068
+S1-S0,"augmentation effect, random init",0.1,test_macro_auroc,5,0.00264,-0.00784,0.01311,2,-0.0046 -0.0041 +0.0153 +0.0068 -0.0002
+S1-S0,"augmentation effect, random init",0.1,test_e3_macro_auroc,5,0.00651,0.00129,0.01173,5,+0.0084 +0.0097 +0.0006 +0.0036 +0.0103
+S1-S0,"augmentation effect, random init",0.1,sph_e3_macro_auroc,5,0.00279,-0.00225,0.00782,4,+0.0046 +0.0001 -0.0015 +0.0088 +0.0020
+S1-S0,"augmentation effect, random init",0.1,e3_degradation,5,0.00372,-0.00357,0.01101,4,+0.0038 +0.0096 +0.0021 -0.0052 +0.0083
+S1-S0,"augmentation effect, random init",0.25,test_macro_auroc,5,0.00144,-0.00554,0.00841,2,-0.0016 +0.0048 +0.0097 -0.0026 -0.0031
+S1-S0,"augmentation effect, random init",0.25,test_e3_macro_auroc,5,0.0012,-0.00291,0.00531,2,-0.0002 -0.0019 +0.0065 -0.0006 +0.0022
+S1-S0,"augmentation effect, random init",0.25,sph_e3_macro_auroc,5,0.00204,-0.00179,0.00587,3,+0.0071 -0.0004 +0.0013 -0.0004 +0.0026
+S1-S0,"augmentation effect, random init",0.25,e3_degradation,5,-0.00084,-0.00636,0.00469,1,-0.0073 -0.0015 +0.0052 -0.0002 -0.0003
+S1-S0,"augmentation effect, random init",0.5,test_macro_auroc,5,-0.00053,-0.0042,0.00314,2,+0.0040 +0.0005 -0.0037 -0.0017 -0.0017
+S1-S0,"augmentation effect, random init",0.5,test_e3_macro_auroc,5,0.00103,-0.00101,0.00307,3,-0.0001 +0.0023 -0.0008 +0.0006 +0.0031
+S1-S0,"augmentation effect, random init",0.5,sph_e3_macro_auroc,5,0.00178,-0.00173,0.00528,4,+0.0048 +0.0022 -0.0027 +0.0013 +0.0033
+S1-S0,"augmentation effect, random init",0.5,e3_degradation,5,-0.00074,-0.00388,0.00239,2,-0.0049 +0.0002 +0.0019 -0.0006 -0.0002
+S1-S0,"augmentation effect, random init",1.0,test_macro_auroc,5,0.00212,-0.00113,0.00536,3,+0.0037 +0.0030 -0.0009 +0.0051 -0.0004
+S1-S0,"augmentation effect, random init",1.0,test_e3_macro_auroc,5,0.00052,-0.00071,0.00176,3,+0.0019 +0.0008 -0.0006 +0.0007 -0.0002
+S1-S0,"augmentation effect, random init",1.0,sph_e3_macro_auroc,5,0.00113,-0.00253,0.00479,4,+0.0045 +0.0027 +0.0004 +0.0015 -0.0034
+S1-S0,"augmentation effect, random init",1.0,e3_degradation,5,-0.00061,-0.00337,0.00215,1,-0.0026 -0.0019 -0.0010 -0.0008 +0.0032
+C1-C0,"augmentation effect, SSL init",0.01,test_macro_auroc,5,-0.01672,-0.03374,0.00031,1,-0.0348 -0.0173 -0.0108 -0.0228 +0.0021
+C1-C0,"augmentation effect, SSL init",0.01,test_e3_macro_auroc,5,-0.00204,-0.01318,0.0091,2,-0.0169 -0.0011 +0.0010 +0.0073 -0.0004
+C1-C0,"augmentation effect, SSL init",0.01,sph_e3_macro_auroc,5,-0.008,-0.03646,0.02047,2,-0.0449 +0.0152 -0.0119 +0.0049 -0.0033
+C1-C0,"augmentation effect, SSL init",0.01,e3_degradation,5,0.00596,-0.01417,0.02609,4,+0.0279 -0.0163 +0.0129 +0.0024 +0.0029
+C1-C0,"augmentation effect, SSL init",0.05,test_macro_auroc,5,0.00169,-0.01312,0.01649,3,+0.0161 -0.0120 +0.0093 -0.0089 +0.0040
+C1-C0,"augmentation effect, SSL init",0.05,test_e3_macro_auroc,5,0.00076,-0.00629,0.0078,2,+0.0040 -0.0028 -0.0049 +0.0091 -0.0015
+C1-C0,"augmentation effect, SSL init",0.05,sph_e3_macro_auroc,5,0.00392,-0.00583,0.01367,3,+0.0066 -0.0025 -0.0059 +0.0131 +0.0082
+C1-C0,"augmentation effect, SSL init",0.05,e3_degradation,5,-0.00317,-0.00834,0.00201,1,-0.0027 -0.0003 +0.0010 -0.0041 -0.0097
+C1-C0,"augmentation effect, SSL init",0.1,test_macro_auroc,5,0.00799,-0.00475,0.02072,4,+0.0151 +0.0109 -0.0055 +0.0190 +0.0004
+C1-C0,"augmentation effect, SSL init",0.1,test_e3_macro_auroc,5,0.00061,-0.00289,0.00411,4,+0.0016 +0.0027 -0.0042 +0.0024 +0.0005
+C1-C0,"augmentation effect, SSL init",0.1,sph_e3_macro_auroc,5,0.00062,-0.0075,0.00873,2,+0.0102 -0.0034 -0.0017 +0.0040 -0.0061
+C1-C0,"augmentation effect, SSL init",0.1,e3_degradation,5,-1e-05,-0.00795,0.00793,2,-0.0086 +0.0061 -0.0025 -0.0017 +0.0066
+C1-C0,"augmentation effect, SSL init",0.25,test_macro_auroc,5,-0.00053,-0.00657,0.00551,2,+0.0044 +0.0033 -0.0079 -0.0015 -0.0010
+C1-C0,"augmentation effect, SSL init",0.25,test_e3_macro_auroc,5,0.00247,0.00033,0.0046,5,+0.0026 +0.0050 +0.0013 +0.0029 +0.0005
+C1-C0,"augmentation effect, SSL init",0.25,sph_e3_macro_auroc,5,-0.00159,-0.00496,0.00177,1,+0.0025 -0.0034 -0.0001 -0.0033 -0.0036
+C1-C0,"augmentation effect, SSL init",0.25,e3_degradation,5,0.00406,-0.00014,0.00826,5,+0.0001 +0.0084 +0.0014 +0.0062 +0.0041
+C1-C0,"augmentation effect, SSL init",0.5,test_macro_auroc,5,0.00046,-0.00605,0.00697,2,-0.0032 -0.0037 +0.0013 -0.0013 +0.0092
+C1-C0,"augmentation effect, SSL init",0.5,test_e3_macro_auroc,5,0.00059,-0.00246,0.00364,3,+0.0021 -0.0015 -0.0017 +0.0040 +0.0001
+C1-C0,"augmentation effect, SSL init",0.5,sph_e3_macro_auroc,5,0.00034,-0.00394,0.00463,2,+0.0038 +0.0039 -0.0041 -0.0013 -0.0006
+C1-C0,"augmentation effect, SSL init",0.5,e3_degradation,5,0.00025,-0.00478,0.00528,3,-0.0017 -0.0054 +0.0024 +0.0053 +0.0007
+C1-C0,"augmentation effect, SSL init",1.0,test_macro_auroc,5,0.00052,-0.00309,0.00413,2,-0.0029 +0.0037 -0.0009 -0.0007 +0.0035
+C1-C0,"augmentation effect, SSL init",1.0,test_e3_macro_auroc,5,0.00032,-0.00036,0.00099,3,-0.0002 +0.0010 -0.0003 +0.0006 +0.0005
+C1-C0,"augmentation effect, SSL init",1.0,sph_e3_macro_auroc,5,0.00432,-0.00072,0.00937,4,+0.0068 +0.0046 +0.0034 +0.0088 -0.0019
+C1-C0,"augmentation effect, SSL init",1.0,e3_degradation,5,-0.00401,-0.00914,0.00112,1,-0.0070 -0.0036 -0.0037 -0.0082 +0.0024
