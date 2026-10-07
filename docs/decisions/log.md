@@ -365,3 +365,24 @@ supersede them with a new one.
 - **Timing (limitation):** frozen after the clean and SPH results of the core grid were known (D33, D34), before
   any corrupted result.
 - **Impact:** RQ v2 §5 "parameters are fixed in code before the first evaluation run" is satisfied by this entry.
+
+### D36 — 2026-10-07 · H2a and the D30 check analysed; no protocol change
+- **Evidence:** `docs/results_h2a_lrcheck_v1.md`; `results/runs/*/corruptions.json` (120), `corruptions.npz`
+  (20, 100% budget), `results/runs/corruptions_registry.csv`, `results/analysis/bootstrap_h2a*.{csv,json}`,
+  `results/analysis/bootstrap_primary_with_h2a.csv`, `results/runs_lrcheck/` (6 runs). Notebook 04 on Kaggle,
+  torch 2.11.0; clean predictions reproduce the grid's (torch 2.10.0) within float16 rounding.
+- **H2a:** C1 − S1 in mean held-out degradation at 100% = −0.0032 (95% interval −0.0046 to −0.0020, p = 0.0002;
+  with seeds resampled −0.0066 to −0.0003). The effect is entirely limb-lead reversal (−0.0106); lead dropout is
+  +0.0011 and the baseline step −0.0001, neither distinguishable from zero.
+- **Reading recorded with the result:** P_ecg augmentation lowers degradation under lead dropout and raises it
+  under reversal, for both initialisations; pretraining halves the increase under reversal. C0 − S0 is −0.0008
+  (interval includes zero), and C1 is no more robust than S0. H2a as pre-specified holds, but "contrastive
+  pretraining improves robustness" would overstate it.
+- **Holm status (three of four):** H2a and H2b are significant for any H3 p-value (p × 4 = 0.0008). H1's adjusted
+  p is at most 0.0484 for any H3 p-value; the caveats of D34 on H1 stand.
+- **D30 check:** C1 at max lr 1e-3 is worse than C1 at 1e-2 on fold 10 by 0.046 (5%) and 0.018 (100%), seeds 0–2.
+  The wash-out concern is not supported. The lower rate also slows learning of the head, so the check is not a
+  clean test of that concern; reported as exploratory, primary C1 results unchanged.
+- **Decision:** no change to any protocol. No hypothesis is declared supported or rejected until H3 is run. A
+  follow-up on why augmentation raises sensitivity to reversal would be exploratory and needs its own entry.
+- **Repository:** `.gitignore` now whitelists `results/runs_lrcheck/` so its prediction files are committed.

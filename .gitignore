@@ -24,3 +24,5 @@ Thumbs.db
 # committed results are allowed (small per-run files, including predictions)
 !results/runs/
 !results/runs/**
+!results/runs_lrcheck/
+!results/runs_lrcheck/**

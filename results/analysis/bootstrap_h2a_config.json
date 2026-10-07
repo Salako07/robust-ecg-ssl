@@ -1,0 +1,44 @@
+{
+ "n_boot": 10000,
+ "rng_seed": 20261006,
+ "budget": 1.0,
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "arms": [
+  "S0",
+  "S1",
+  "C0",
+  "C1"
+ ],
+ "n_test_records": 2198,
+ "n_test_patients": 1904,
+ "conditions": [
+  "lead_dropout_s1",
+  "lead_dropout_s2",
+  "lead_dropout_s3",
+  "limb_reversal_s1",
+  "limb_reversal_s2",
+  "limb_reversal_s3",
+  "baseline_step_s1",
+  "baseline_step_s2",
+  "baseline_step_s3",
+  "seen_baseline_wander_s1",
+  "seen_baseline_wander_s2",
+  "seen_baseline_wander_s3",
+  "seen_emg_bursts_s1",
+  "seen_emg_bursts_s2",
+  "seen_emg_bursts_s3",
+  "seen_lead_scaling_s1",
+  "seen_lead_scaling_s2",
+  "seen_lead_scaling_s3"
+ ],
+ "suite_seed": 20261007,
+ "protocol_frozen": true,
+ "reproduction_max_abs_diff": 1.2153643966339445e-05,
+ "family_size": 4
+}
