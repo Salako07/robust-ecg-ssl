@@ -386,3 +386,23 @@ supersede them with a new one.
 - **Decision:** no change to any protocol. No hypothesis is declared supported or rejected until H3 is run. A
   follow-up on why augmentation raises sensitivity to reversal would be exploratory and needs its own entry.
 - **Repository:** `.gitignore` now whitelists `results/runs_lrcheck/` so its prediction files are committed.
+
+### D37 — 2026-10-07 · H3 protocol v1 frozen (one amendment before freezing)
+- **Decision:** `docs/h3_protocol_v1.md` is frozen. The two H3 arms differ only in the pretraining policy
+  (P_ecg vs P_gen); both are fine-tuned in the C1 configuration with P_ecg-mid at the 100% budget. Levels
+  low/mid/high scale every magnitude by 0.5/1.0/1.5; noise components are matched on SNR within 0.7 dB, scaling is
+  equal, masking and warping are not compensated. One level per policy is selected by a linear probe on fold 9
+  (seed-0 encoders; ties within 0.0005 go to the lower level). The full 3 × 2 grid runs at seed 0; the two
+  selected policy-levels at seeds 0–4. H3 is a conjunction of two outcomes (held-out corruptions, SPH), so its
+  p-value in the Holm family is the larger of the two.
+- **Reason:** RQ v2 §4–§6 left open the fine-tuning of the H3 arms, the meaning of "matched for strength", the
+  probe recipe, the number of seeds and how two outcomes form one primary contrast.
+- **Amendment before freezing (judgement 3):** the probe recipe first approved (AdamW lr 1e-3, 500 steps) did not
+  converge in a unit test on synthetic 512-dimensional features (AUROC 0.83 against 0.97 for a converged logistic
+  regression). Changed to lr 1e-2, 1,000 steps (0.96 on the same task). Found and changed on synthetic data only.
+- **Timing (limitation):** frozen after H1, H2a and H2b were analysed (D34, D36). Holding the fine-tuning
+  augmentation fixed (judgement 1) is informed by the H2a finding that fine-tuning augmentation changes robustness.
+  No P_gen encoder and no H3 run existed.
+- **Evidence:** `tests/test_h3.py` (7 tests); end-to-end smoke run of `scripts/run_h3.py` and
+  `scripts/bootstrap_h3.py` on synthetic data with randomly trained models (stages A–E, manifest, bootstrap).
+- **Impact:** if the probe selects mid for P_ecg, the core C1 runs are the P_ecg arm and are reused unchanged.
