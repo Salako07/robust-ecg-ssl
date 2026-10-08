@@ -1,0 +1,13 @@
+{
+ "run_id": "SSL_gen-high_s0",
+ "policy": "gen",
+ "strength": "high",
+ "seed": 0,
+ "epochs": 300,
+ "bs": 512,
+ "tau": 0.1,
+ "final_loss": 0.11766934000393924,
+ "final_top1": 0.9993106617647058,
+ "minutes_last_session": 19.816423984368644,
+ "encoder_sha256": "34a3822a47196dc2613b17d650e641b3387a30ade15c33d1757fe72c52c7066a"
+}

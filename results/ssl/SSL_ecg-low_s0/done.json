@@ -1,0 +1,13 @@
+{
+ "run_id": "SSL_ecg-low_s0",
+ "policy": "ecg",
+ "strength": "low",
+ "seed": 0,
+ "epochs": 300,
+ "bs": 512,
+ "tau": 0.1,
+ "final_loss": 0.08826070980114095,
+ "final_top1": 1.0,
+ "minutes_last_session": 21.233617961406708,
+ "encoder_sha256": "2a9f7ddb44fac010087d42a59cea67e7588cc5af07e434376d596de7c6c248f9"
+}

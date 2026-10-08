@@ -26,3 +26,5 @@ Thumbs.db
 !results/runs/**
 !results/runs_lrcheck/
 !results/runs_lrcheck/**
+!results/runs_h3/
+!results/runs_h3/**

@@ -1,0 +1,163 @@
+{
+ "selection": {
+  "ecg": "mid",
+  "gen": "high"
+ },
+ "ft_augment": "ecg-mid",
+ "runs": [
+  {
+   "policy": "ecg",
+   "level": "low",
+   "seed": 0,
+   "in_primary": false,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s0_lik0_h3-ecg-low",
+   "run_id": "C1_b1_s0_lik0_h3-ecg-low",
+   "ssl_run": "SSL_ecg-low_s0",
+   "encoder_sha256": "2a9f7ddb44fac010087d42a59cea67e7588cc5af07e434376d596de7c6c248f9"
+  },
+  {
+   "policy": "ecg",
+   "level": "mid",
+   "seed": 0,
+   "in_primary": true,
+   "reused_core_run": true,
+   "run_dir": "runs/C1_b1_s0_lik0",
+   "run_id": "C1_b1_s0_lik0",
+   "ssl_run": "SSL_ecg-mid_s0",
+   "encoder_sha256": "0cc027b0c1e31fe3045ccb78c9e544b704b7e21e520de3a84d307fcf029a94b7"
+  },
+  {
+   "policy": "ecg",
+   "level": "mid",
+   "seed": 1,
+   "in_primary": true,
+   "reused_core_run": true,
+   "run_dir": "runs/C1_b1_s1_lik0",
+   "run_id": "C1_b1_s1_lik0",
+   "ssl_run": "SSL_ecg-mid_s1",
+   "encoder_sha256": "81d0fc9a3aa05796854bcdcd87e8382eb2143ab66049c5652c5601ae6b3dc0bc"
+  },
+  {
+   "policy": "ecg",
+   "level": "mid",
+   "seed": 2,
+   "in_primary": true,
+   "reused_core_run": true,
+   "run_dir": "runs/C1_b1_s2_lik0",
+   "run_id": "C1_b1_s2_lik0",
+   "ssl_run": "SSL_ecg-mid_s2",
+   "encoder_sha256": "937ba6da159de527cc2aa1a78b40f58104891df6e8ce2e76a9a3090cf0c60ef2"
+  },
+  {
+   "policy": "ecg",
+   "level": "mid",
+   "seed": 3,
+   "in_primary": true,
+   "reused_core_run": true,
+   "run_dir": "runs/C1_b1_s3_lik0",
+   "run_id": "C1_b1_s3_lik0",
+   "ssl_run": "SSL_ecg-mid_s3",
+   "encoder_sha256": "00d87f9d30f589d567b0969b8313e9f43cb278ec87ae2dde39cd1c3884f305c9"
+  },
+  {
+   "policy": "ecg",
+   "level": "mid",
+   "seed": 4,
+   "in_primary": true,
+   "reused_core_run": true,
+   "run_dir": "runs/C1_b1_s4_lik0",
+   "run_id": "C1_b1_s4_lik0",
+   "ssl_run": "SSL_ecg-mid_s4",
+   "encoder_sha256": "21fa86e377aa7f75321550cfd8eb18f5457844112e96c4a3f904aa7a8e90f996"
+  },
+  {
+   "policy": "ecg",
+   "level": "high",
+   "seed": 0,
+   "in_primary": false,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s0_lik0_h3-ecg-high",
+   "run_id": "C1_b1_s0_lik0_h3-ecg-high",
+   "ssl_run": "SSL_ecg-high_s0",
+   "encoder_sha256": "9f3c667e963f3d7d56b3158e2372d8c581cdb6c7a83472a131efc257c1fb0018"
+  },
+  {
+   "policy": "gen",
+   "level": "low",
+   "seed": 0,
+   "in_primary": false,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s0_lik0_h3-gen-low",
+   "run_id": "C1_b1_s0_lik0_h3-gen-low",
+   "ssl_run": "SSL_gen-low_s0",
+   "encoder_sha256": "b00d8523a829102097cc21a476177e9c1e2bffa49b055682d2934f39835aa388"
+  },
+  {
+   "policy": "gen",
+   "level": "mid",
+   "seed": 0,
+   "in_primary": false,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s0_lik0_h3-gen-mid",
+   "run_id": "C1_b1_s0_lik0_h3-gen-mid",
+   "ssl_run": "SSL_gen-mid_s0",
+   "encoder_sha256": "9507c86e2d5e870390fc0a1b02e66712ed5eef724614d3d8010592a821a58e5a"
+  },
+  {
+   "policy": "gen",
+   "level": "high",
+   "seed": 0,
+   "in_primary": true,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s0_lik0_h3-gen-high",
+   "run_id": "C1_b1_s0_lik0_h3-gen-high",
+   "ssl_run": "SSL_gen-high_s0",
+   "encoder_sha256": "34a3822a47196dc2613b17d650e641b3387a30ade15c33d1757fe72c52c7066a"
+  },
+  {
+   "policy": "gen",
+   "level": "high",
+   "seed": 1,
+   "in_primary": true,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s1_lik0_h3-gen-high",
+   "run_id": "C1_b1_s1_lik0_h3-gen-high",
+   "ssl_run": "SSL_gen-high_s1",
+   "encoder_sha256": "61ace2b59fbb24133f0b59ebfa726da93065bf7da54c85208ce2e34c63c31cc7"
+  },
+  {
+   "policy": "gen",
+   "level": "high",
+   "seed": 2,
+   "in_primary": true,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s2_lik0_h3-gen-high",
+   "run_id": "C1_b1_s2_lik0_h3-gen-high",
+   "ssl_run": "SSL_gen-high_s2",
+   "encoder_sha256": "fb82c3d616ac393254fccc42a4fd5b37a2fa00a56cc71edce0ffb861ad79ee0e"
+  },
+  {
+   "policy": "gen",
+   "level": "high",
+   "seed": 3,
+   "in_primary": true,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s3_lik0_h3-gen-high",
+   "run_id": "C1_b1_s3_lik0_h3-gen-high",
+   "ssl_run": "SSL_gen-high_s3",
+   "encoder_sha256": "6dccc335d7dd842a2c5e274f614314e452b3cd7d0f6c883a62dc6ba5b89c7427"
+  },
+  {
+   "policy": "gen",
+   "level": "high",
+   "seed": 4,
+   "in_primary": true,
+   "reused_core_run": false,
+   "run_dir": "runs_h3/C1_b1_s4_lik0_h3-gen-high",
+   "run_id": "C1_b1_s4_lik0_h3-gen-high",
+   "ssl_run": "SSL_gen-high_s4",
+   "encoder_sha256": "c6fb68372394cdddf4537848cee0b3842acd1beda2eb44ba0c792e02a4bfbe47"
+  }
+ ]
+}

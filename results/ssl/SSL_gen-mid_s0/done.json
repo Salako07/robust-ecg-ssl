@@ -1,0 +1,13 @@
+{
+ "run_id": "SSL_gen-mid_s0",
+ "policy": "gen",
+ "strength": "mid",
+ "seed": 0,
+ "epochs": 300,
+ "bs": 512,
+ "tau": 0.1,
+ "final_loss": 0.10390560087912223,
+ "final_top1": 0.99951171875,
+ "minutes_last_session": 21.67637703418732,
+ "encoder_sha256": "9507c86e2d5e870390fc0a1b02e66712ed5eef724614d3d8010592a821a58e5a"
+}

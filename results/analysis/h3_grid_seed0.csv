@@ -1,0 +1,7 @@
+policy,level,selected,test_macro_auroc,sph_e3_macro_auroc,e3_degradation,held_out_mean_degradation,lead_dropout_degradation,limb_reversal_degradation,baseline_step_degradation
+ecg,low,False,0.92363,0.96906,0.00705,0.02841,0.01493,0.06955,0.00074
+ecg,mid,True,0.9183,0.97242,0.00349,0.02161,0.01295,0.05119,0.00071
+ecg,high,False,0.9234,0.97133,0.00464,0.02229,0.01455,0.05164,0.00068
+gen,low,False,0.91987,0.96982,0.0073,0.03235,0.01481,0.08155,0.00069
+gen,mid,False,0.9238,0.97141,0.00538,0.02807,0.01433,0.06853,0.00134
+gen,high,True,0.92204,0.97269,0.0028,0.0268,0.01517,0.06482,0.0004

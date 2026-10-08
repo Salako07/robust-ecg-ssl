@@ -1,0 +1,20 @@
+{
+ "selection": {
+  "ecg": "mid",
+  "gen": "high"
+ },
+ "scores": {
+  "ecg": {
+   "low": 0.8844622613711306,
+   "mid": 0.8907394532789689,
+   "high": 0.8861933749815922
+  },
+  "gen": {
+   "low": 0.8691201618296175,
+   "mid": 0.8646888976087114,
+   "high": 0.8718009368655498
+  }
+ },
+ "tie_margin": 0.0005,
+ "rule": "highest fold-9 linear-probe macro-AUROC; within the tie margin the lower level"
+}

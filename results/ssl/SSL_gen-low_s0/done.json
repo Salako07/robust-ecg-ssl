@@ -1,0 +1,13 @@
+{
+ "run_id": "SSL_gen-low_s0",
+ "policy": "gen",
+ "strength": "low",
+ "seed": 0,
+ "epochs": 300,
+ "bs": 512,
+ "tau": 0.1,
+ "final_loss": 0.09294123377870112,
+ "final_top1": 0.9999712775735294,
+ "minutes_last_session": 21.66532233953476,
+ "encoder_sha256": "b00d8523a829102097cc21a476177e9c1e2bffa49b055682d2934f39835aa388"
+}

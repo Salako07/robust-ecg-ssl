@@ -406,3 +406,20 @@ supersede them with a new one.
 - **Evidence:** `tests/test_h3.py` (7 tests); end-to-end smoke run of `scripts/run_h3.py` and
   `scripts/bootstrap_h3.py` on synthetic data with randomly trained models (stages A–E, manifest, bootstrap).
 - **Impact:** if the probe selects mid for P_ecg, the core C1 runs are the P_ecg arm and are reused unchanged.
+
+### D38 — 2026-10-08 · H3 analysed; primary family complete
+- **Evidence:** `docs/results_h3_v1.md`; `results/h3/`, `results/runs_h3/`, `results/ssl/` (new runs),
+  `results/analysis/bootstrap_h3.csv`, `bootstrap_h3_summary.json`, `bootstrap_primary_final.csv`,
+  `h3_grid_seed0.csv`. Notebook 05 on Kaggle, torch 2.11.0.
+- **Selection (fold-9 linear probe, seed 0):** P_ecg mid (0.8907), P_gen high (0.8718); the P_ecg arm is therefore
+  the core C1 runs, reused unchanged as the protocol specified.
+- **H3:** P_ecg-mid − P_gen-high, held-out corruption degradation +0.0002 (−0.0011 to +0.0013, p = 0.83); SPH
+  degradation −0.0020 (−0.0029 to −0.0011, p = 0.0002; seeds-plus-patients −0.0049 to +0.0006). Conjunction
+  p = 0.83: H3 not supported.
+- **Final Holm over the four primary contrasts:** H1 0.048, H2a 0.0008, H2b 0.0008, H3 0.83. The caveats recorded
+  in D34 (H1) and D36 (H2a) stand and accompany these values wherever they are reported.
+- **Observation (not tested):** the generic policy distorts views about 9–26× more than the ECG policy, yet every
+  pretraining run ends with in-batch retrieval ≥ 0.999.
+- **Decision:** no protocol change. Remaining pre-specified work: sensitivity analyses (likelihood ≥ 50,
+  amplitude outliers, full-length SPH), outside the Holm family. Then Results, Discussion and Limitations.
+- **Repository:** `.gitignore` whitelists `results/runs_h3/` so its prediction files are committed.

@@ -1,0 +1,18 @@
+{
+ "encoder": "/tmp/work/ssl/SSL_gen-mid_s0/encoder.pt",
+ "encoder_sha256": "9507c86e2d5e870390fc0a1b02e66712ed5eef724614d3d8010592a821a58e5a",
+ "val_macro_auroc": 0.8646888976087114,
+ "val_n_labels": 71,
+ "n_train": 17418,
+ "n_val": 2183,
+ "feature_dim": 512,
+ "final_train_loss": 0.06722448021173477,
+ "steps": 1000,
+ "lr": 0.01,
+ "weight_decay": 0.0,
+ "seed": 0,
+ "platform": "kaggle",
+ "torch": "2.11.0+cu128",
+ "gpu": "Tesla T4",
+ "cudnn": 91900
+}

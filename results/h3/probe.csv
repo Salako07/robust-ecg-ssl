@@ -1,0 +1,7 @@
+policy,level,val_macro_auroc,selected
+ecg,low,0.8844622613711306,False
+ecg,mid,0.8907394532789689,True
+ecg,high,0.8861933749815922,False
+gen,low,0.8691201618296175,False
+gen,mid,0.8646888976087114,False
+gen,high,0.8718009368655498,True
