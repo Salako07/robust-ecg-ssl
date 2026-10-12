@@ -6,7 +6,8 @@ distribution shift, **once supervised baselines receive the same augmentations**
 This is a master's research portfolio project: a working paper plus a reproducible codebase.
 It does not aim to set state-of-the-art results.
 
-## Research question (v2)
+You can go through my working paper here [`Click here`](https://drive.google.com/file/d/1qkq8jVtSMnP9b2DK62n1uBJ8KSmFgDdu/view?usp=sharing)
+## Research question 
 
 When supervised and contrastively pretrained ECG models receive the same augmentation policy, does
 self-supervised pretraining still improve (a) performance under limited labels, (b) robustness to
